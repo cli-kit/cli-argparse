@@ -1,8 +1,5 @@
-var short = '-',
-  long = '--',
-  sre = /^-[^-]+/,
-  lre = /^--[^-]+/,
-  negate = /^--no-/;
+var short = '-', long = '--';
+var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /^--no-/;
 
 function camelcase(flag) {
   return flag.split('-').reduce(function(str, word){
@@ -45,7 +42,6 @@ function options(arg, output, next) {
   }
   negated = negate.test(arg);
   key = toOptionKey(arg, negated);
-  // treating long option as a flag
   if(flag) {
     output.flags[key] = negated ? false : true;
   }else{
