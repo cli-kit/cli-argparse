@@ -39,10 +39,12 @@ function flags(arg, output, next, opts) {
 function options(arg, output, next, opts) {
   var equals = arg.indexOf('='), value, result = false, negated, key;
   var flag = (!next && equals == -1)
-    || (next && next.indexOf('-') == 0 && equals == -1);
+    || (next && next.indexOf(short) == 0 && equals == -1);
   if(equals > -1) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
-  }else if(next && !flag) {
+  }
+  if(opts.flags.indexOf(arg) > -1) flag = true;
+  if(next && !flag && equals == -1) {
     value = next; result = true;
   }
   negated = negate.test(arg);
@@ -64,6 +66,7 @@ function options(arg, output, next, opts) {
 
 function parse(args, opts) {
   opts = opts || {}; opts.alias = opts.alias || {};
+  opts.flags = opts.flags || [], opts.options = opts.options || [];
   args = args || process.argv.slice(2); args = args.slice(0);
   var output = {flags: {}, options: {},
     raw: args.slice(0), stdin: false, unparsed: []};
