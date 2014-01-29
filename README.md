@@ -1,6 +1,6 @@
 # Parse
 
-Lightweight argument parser.
+Lightweight yet feature rich argument parser.
 
 This module does not define any options or any program requirements it simply parses arguments into an object structure that is easier for other modules to work with.
 
