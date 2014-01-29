@@ -13,7 +13,7 @@ describe('cli-argparse:', function() {
       '--file=file.json', '--file', 'file.txt',
       '-', '--', '--port=80'];
     var result = argparse(args);
-    //console.dir(result);
+    console.dir(result);
     done();
   });
 })

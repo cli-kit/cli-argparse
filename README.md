@@ -16,6 +16,8 @@ npm install cli-argparse
 npm test
 ```
 
+## Example
+
 ## API
 
 ```javascript
@@ -24,7 +26,21 @@ var result = parse();  // use process.argv.slice(2)
 console.dir(result);
 ```
 
-## Example
+### parse(args)
+
+* `args`: Specific arguments to parse, default is `process.argv.slice(2)`.
+
+Returns a result object.
+
+### Result
+
+The result object contains the fields:
+
+* `flags`: Object containing arguments treated as flags.
+* `options`: Object containing arguments treated as options with values.
+* `raw`: Array of the raw arguments parsed. 
+* `stdin`: Boolean indicating whether `-` is present in the argument list.
+* `unparsed`: Array of values that were not parsed.
 
 ## License
 
