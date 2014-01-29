@@ -36,7 +36,8 @@ var args = [
   '--port=80',
   '--file=file.txt',
   '--file',
-  'file.json'
+  'file.json',
+  '--no-color'
 ];
 var result = parse(args);
 ```

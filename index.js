@@ -15,9 +15,9 @@ function toOptionKey(arg, negated, opts) {
   return camelcase(key);
 }
 
-function unique(value, index, self) {
-  return self.indexOf(value) === index;
-}
+//function unique(value, index, self) {
+  //return self.indexOf(value) === index;
+//}
 
 function alias(key, opts) {
   var alias = opts.alias, z, keys;
@@ -29,11 +29,11 @@ function alias(key, opts) {
 }
 
 function flags(arg, output, next, opts) {
-  var result = alias(arg, opts);
+  var result = alias(arg, opts), keys;
   if(!result.aliased) {
     arg = arg.replace(/^-/, '');
-    var keys = arg.split('');
-    keys = keys.filter(unique);
+    keys = arg.split('');
+    //keys = keys.filter(unique);
     keys.forEach(function(key) {
       output.flags[key] = true;
     })
