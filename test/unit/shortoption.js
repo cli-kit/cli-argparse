@@ -19,4 +19,13 @@ describe('cli-argparse:', function() {
     expect(result.options.f).to.eql(['file.txt', 'file.json']);
     done();
   });
+  it('should treat short argument as option with alias', function(done) {
+    var aliases = {'-f': 'file'};
+    var options = ['-f'];
+    var args = ['-xvf', 'file.txt', '-f=file.json', '-f', 'file.js'];
+    var result = parse(args, {options: options, alias: aliases});
+    expect(result.raw).to.eql(args);
+    expect(result.options.file).to.eql(['file.txt', 'file.json', 'file.js']);
+    done();
+  });
 })
