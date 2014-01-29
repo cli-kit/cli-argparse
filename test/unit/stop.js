@@ -3,17 +3,26 @@ var argparse = require('../..');
 
 describe('cli-argparse:', function() {
   it('should stop parsing', function(done) {
-    var args = [
-      '-v',
-      '-cffV',
-      '--long', 'value',
-      '--long', 'new-value',
-      '--long-flag',
-      '--no-color',
-      '--file=file.json', '--file', 'file.txt',
-      '-', '--', '--port=80'];
+    //var args = [
+      //'-v',
+      //'-cffV',
+      //'--long', 'value',
+      //'--long', 'new-value',
+      //'--long-flag',
+      //'--no-color',
+      //'--file=file.json', '--file', 'file.txt',
+      //'-', '--', '--port=80'];
+    var args = ['-xvf', '--', 'server', '--port=80', '--host=localhost'];
     var result = argparse(args);
-    //console.dir(result);
+    expect(result.raw).to.eql(args);
+    expect(result.flags.x).to.eql(true);
+    expect(result.flags.v).to.eql(true);
+    expect(result.flags.f).to.eql(true);
+    expect(result.unparsed).to.be.an('array');
+    expect(result.unparsed.length).to.eql(3);
+    expect(result.unparsed[0]).to.eql(args[2]);
+    expect(result.unparsed[1]).to.eql(args[3]);
+    expect(result.unparsed[2]).to.eql(args[4]);
     done();
   });
 })
