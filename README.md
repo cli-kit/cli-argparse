@@ -12,6 +12,7 @@ This module does not define any options or any program requirements it simply pa
 * Expands short flags such as `-xvf`
 * Treat `-` as special stdin flag
 * Stop argument parsing on `--`
+* Comprehensive test suite
 
 ## Install
 
