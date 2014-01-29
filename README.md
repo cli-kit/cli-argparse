@@ -93,11 +93,7 @@ Returns a result object.
 
 #### Aliases
 
-Aliases are mapped on the argument name without leading hyphens.
-
-To map `-v | --verbose` to a `verbose` property use `{'v verbose': 'verbose'}`.
-
-To map `-f | --file-name` to a `file` property use `{'f file-name': 'file'}`.
+Aliases are mapped on the raw argument name, to map `-v | --verbose` to a `verbose` property use `{'-v --verbose': 'verbose'}`.
 
 ### Result
 
