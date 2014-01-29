@@ -64,7 +64,7 @@ function options(arg, output, next) {
 function parse(args) {
   args = args || process.argv.slice(2);
   args = args.slice(0);
-  var output = {flags: {}, options: {}, raw: args.slice(0)};
+  var output = {flags: {}, options: {}, raw: args.slice(0), stdin: false};
   var i, arg, l = args.length, key, skip;
   for(i = 0;i < l;i++) {
     arg = '' + args.shift(), skip = false;
