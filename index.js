@@ -9,9 +9,10 @@ function camelcase(flag) {
 
 function toOptionKey(arg, negated, opts) {
   var key = arg.replace(/^-+/, '');
-  if(negated) key = key.replace(/^no-/, '')
-  key = camelcase(key);
-  return alias(key, opts);
+  if(negated) key = key.replace(/^no-/, '');
+  var result = alias(key, opts);
+  key = !result.aliased ? camelcase(key) : result.key;
+  return key;
 }
 
 function unique(value, index, self) {
@@ -22,9 +23,9 @@ function alias(key, opts) {
   var alias = opts.alias, z, keys;
   for(z in alias) {
     keys = z.split(/\s+/);
-    if(keys.indexOf(key) > -1) return alias[z];
+    if(keys.indexOf(key) > -1) return {key: alias[z], aliased: true};
   }
-  return key;
+  return {key: key, aliased: false};
 }
 
 function flags(arg, output, next, opts) {
@@ -32,7 +33,7 @@ function flags(arg, output, next, opts) {
   var keys = arg.split('');
   keys = keys.filter(unique);
   keys.forEach(function(key) {
-    key = alias(key, opts);
+    key = alias(key, opts).key;
     output.flags[key] = true;
   })
   return false;
@@ -41,7 +42,8 @@ function flags(arg, output, next, opts) {
 function options(arg, output, next, opts) {
   var equals = arg.indexOf('='), value, result = false, negated;
   var flag = false, key;
-  if(!next || (next && next.indexOf('-') == 0 && equals == -1)) {
+  if((!next && equals == -1)
+    || (next && next.indexOf('-') == 0 && equals == -1)) {
     flag = true;
   }
   if(equals > -1) {
