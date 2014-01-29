@@ -9,6 +9,7 @@ This module does not define any options or any program requirements it simply pa
 * Lightweight, zero dependencies and less than 100 lines of code
 * Supports multiple option values as arrays
 * Supports long flag negations, eg: `--no-color`
+* Supports `--option=value` and `--option value`
 * Treat `-` as special stdin flag
 * Stop argument parsing on `--`
 
