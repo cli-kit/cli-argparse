@@ -97,11 +97,7 @@ Aliases are mapped on the argument name without leading hyphens.
 
 To map `-v | --verbose` to a `verbose` property use `{'v verbose': 'verbose'}`.
 
-To map `-n | --file-name` to a `name` property use `{'n file-name': 'name'}`.
-
-```
-
-```
+To map `-f | --file-name` to a `file` property use `{'f file-name': 'file'}`.
 
 ### Result
 
