@@ -77,12 +77,11 @@ function parse(args, opts) {
     if(arg == short) {
       output.stdin = true;
     }else if(arg == long) {
-      output.unparsed = output.unparsed.concat(args.slice(i));
-      break;
+      output.unparsed = output.unparsed.concat(args.slice(i)); break;
+    }else if(lre.test(arg) || opts.options.indexOf(arg) > -1) {
+      skip = options(arg, output, args[0], opts);
     }else if(sre.test(arg)) {
       skip = flags(arg, output, args[0], opts);
-    }else if(lre.test(arg)) {
-      skip = options(arg, output, args[0], opts);
     }else{
       output.unparsed.push(arg);
     }
