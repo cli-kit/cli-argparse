@@ -19,10 +19,12 @@ npm test
 ## API
 
 ```javascript
-var parse = require('argparse');
+var parse = require('cli-argparse');
 var result = parse();  // use process.argv.slice(2)
 console.dir(result);
 ```
+
+## Example
 
 ## License
 
