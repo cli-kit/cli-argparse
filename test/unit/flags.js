@@ -38,6 +38,17 @@ describe('cli-argparse:', function() {
     expect(result.flags.multipleFlag).to.eql(true);
     done();
   });
+  it('should parse long/short flags', function(done) {
+    var args = ['--long-flag', '--multiple-flag', '-xvf'];
+    var result = argparse(args);
+    expect(result.raw).to.eql(args);
+    expect(result.flags.x).to.eql(true);
+    expect(result.flags.v).to.eql(true);
+    expect(result.flags.f).to.eql(true);
+    expect(result.flags.longFlag).to.eql(true);
+    expect(result.flags.multipleFlag).to.eql(true);
+    done();
+  });
   it('should parse short/long/short flags', function(done) {
     var args = ['-xvf', '--long-flag', '--multiple-flag', '-z'];
     var result = argparse(args);
