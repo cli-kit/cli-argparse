@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+var parse = require('..');
+var args = [
+  'server',
+  'start',
+  '-xvd',
+  '--port=80',
+  '--file=file.txt',
+  '--file',
+  'file.json'
+];
+var result = parse(args);
+console.log(JSON.stringify(result, undefined, 2));

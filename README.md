@@ -27,6 +27,51 @@ npm test
 
 ## Example
 
+```javascript
+var parse = require('..');
+var args = [
+  'server',
+  'start',
+  '-xvd',
+  '--port=80',
+  '--file=file.txt',
+  '--file',
+  'file.json'
+];
+var result = parse(args);
+```
+
+```json
+{
+  "flags": {
+    "x": true,
+    "v": true,
+    "d": true
+  },
+  "options": {
+    "port": "80",
+    "file": [
+      "file.txt",
+      "file.json"
+    ]
+  },
+  "raw": [
+    "server",
+    "start",
+    "-xvd",
+    "--port=80",
+    "--file=file.txt",
+    "--file",
+    "file.json"
+  ],
+  "stdin": false,
+  "unparsed": [
+    "server",
+    "start"
+  ]
+}
+```
+
 ## API
 
 ```javascript
