@@ -31,7 +31,7 @@ npm test
 
 ```javascript
 var parse = require('cli-argparse');
-var result = parse();  // use process.argv.slice(2)
+var result = parse();
 console.dir(result);
 ```
 

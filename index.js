@@ -27,7 +27,7 @@ function alias(key, opts) {
   return key;
 }
 
-function flags(arg, output, opts) {
+function flags(arg, output, next, opts) {
   arg = arg.replace(/^-/, '');
   var keys = arg.split('');
   keys = keys.filter(unique);
@@ -35,6 +35,7 @@ function flags(arg, output, opts) {
     key = alias(key, opts);
     output.flags[key] = true;
   })
+  return false;
 }
 
 function options(arg, output, next, opts) {
@@ -68,12 +69,12 @@ function options(arg, output, next, opts) {
 }
 
 function parse(args, opts) {
-  opts = opts || {}; opts.alias = opts.alias || {};
-  args = args || process.argv.slice(2);
-  args = args.slice(0);
   var output = {flags: {}, options: {},
     raw: args.slice(0), stdin: false, unparsed: []};
   var i, arg, l = args.length, key, skip;
+  opts = opts || {}; opts.alias = opts.alias || {};
+  args = args || process.argv.slice(2);
+  args = args.slice(0);
   for(i = 0;i < l;i++) {
     if(!args[0]) break;
     arg = '' + args.shift(), skip = false;
@@ -83,17 +84,13 @@ function parse(args, opts) {
       output.unparsed = output.unparsed.concat(args.slice(i));
       break;
     }else if(sre.test(arg)) {
-      flags(arg, output, opts);
+      skip = flags(arg, output, args[0], opts);
     }else if(lre.test(arg)) {
       skip = options(arg, output, args[0], opts);
-      if(skip) {
-        args.shift(); i--; l--;
-        continue;
-      }
     }else{
       output.unparsed.push(arg);
     }
-    l--; i--;
+    if(skip) args.shift(); l--; i--;
   }
   return output;
 }
