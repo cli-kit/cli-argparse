@@ -4,6 +4,13 @@ Lightweight argument parser.
 
 This module does not define any options or any program requirements it simply parses arguments into an object structure that is easier for other modules to work with.
 
+## Features
+
+* Lightweight, zero-dependencies `<100` lines of code
+* Supports multiple option values
+* Treat `-` as special stdin flag
+* Stop argument parsing on `--`
+
 ## Install
 
 ```
