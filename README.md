@@ -28,7 +28,7 @@ npm test
 ## Example
 
 ```javascript
-var parse = require('..');
+var parse = require('cli-argparse');
 var args = [
   'server',
   'start',
