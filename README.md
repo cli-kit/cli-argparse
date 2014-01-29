@@ -91,10 +91,22 @@ Returns a result object.
 #### Options
 
 * `alias`: Map of argument names to property names.
+* `flags`: Array of argument names to be treated as flags.
+* `options`: Array of argument names to be treated as options.
 
-#### Aliases
+##### Aliases
 
 Aliases are mapped on the raw argument name, to map `-v | --verbose` to a `verbose` property use `{'-v --verbose': 'verbose'}`.
+
+##### Flags
+
+Use the flags array when you need to force a long argument to be treated as a
+flag, for example `['--syntax-highlight']`.
+
+##### Options
+
+Use the options array when you need to treat a short argument as accepting a
+value, for example `['-f']`.
 
 ### Result
 

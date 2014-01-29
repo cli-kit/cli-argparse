@@ -70,15 +70,19 @@ function parse(args, opts) {
   args = args || process.argv.slice(2); args = args.slice(0);
   var output = {flags: {}, options: {},
     raw: args.slice(0), stdin: false, unparsed: []};
-  var i, arg, l = args.length, key, skip;
+  var i, arg, l = args.length, key, skip, larg, sarg;
   for(i = 0;i < l;i++) {
     if(!args[0]) break;
     arg = '' + args.shift(), skip = false;
+    larg = lre.test(arg);
+    opts.options.forEach(function(o){
+      if(arg.indexOf(o) > -1) larg = true;
+    });
     if(arg == short) {
       output.stdin = true;
     }else if(arg == long) {
       output.unparsed = output.unparsed.concat(args.slice(i)); break;
-    }else if(lre.test(arg) || opts.options.indexOf(arg) > -1) {
+    }else if(larg) {
       skip = options(arg, output, args[0], opts);
     }else if(sre.test(arg)) {
       skip = flags(arg, output, args[0], opts);
