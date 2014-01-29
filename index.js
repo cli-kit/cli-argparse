@@ -40,18 +40,13 @@ function flags(arg, output, next, opts) {
 }
 
 function options(arg, output, next, opts) {
-  var equals = arg.indexOf('='), value, result = false, negated;
-  var flag = false, key;
-  if((!next && equals == -1)
-    || (next && next.indexOf('-') == 0 && equals == -1)) {
-    flag = true;
-  }
+  var equals = arg.indexOf('='), value, result = false, negated, key;
+  var flag = (!next && equals == -1)
+    || (next && next.indexOf('-') == 0 && equals == -1);
   if(equals > -1) {
-    value = arg.slice(equals + 1);
-    arg = arg.slice(0, equals);
+    value = arg.slice(equals + 1); arg = arg.slice(0, equals);
   }else if(next && !flag) {
-    value = next;
-    result = true;
+    value = next; result = true;
   }
   negated = negate.test(arg);
   key = toOptionKey(arg, negated, opts);
@@ -71,12 +66,11 @@ function options(arg, output, next, opts) {
 }
 
 function parse(args, opts) {
+  opts = opts || {}; opts.alias = opts.alias || {};
+  args = args || process.argv.slice(2); args = args.slice(0);
   var output = {flags: {}, options: {},
     raw: args.slice(0), stdin: false, unparsed: []};
   var i, arg, l = args.length, key, skip;
-  opts = opts || {}; opts.alias = opts.alias || {};
-  args = args || process.argv.slice(2);
-  args = args.slice(0);
   for(i = 0;i < l;i++) {
     if(!args[0]) break;
     arg = '' + args.shift(), skip = false;

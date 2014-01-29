@@ -1,10 +1,10 @@
 var expect = require('chai').expect;
-var argparse = require('../..');
+var parse = require('../..');
 
 describe('cli-argparse:', function() {
   it('should stop parsing', function(done) {
     var args = ['-xvf', '--', 'server', '--port=80', '--host=localhost'];
-    var result = argparse(args);
+    var result = parse(args);
     expect(result.raw).to.eql(args);
     expect(result.flags.x).to.eql(true);
     expect(result.flags.v).to.eql(true);
