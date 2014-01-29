@@ -7,27 +7,37 @@ function camelcase(flag) {
   });
 }
 
-function toOptionKey(arg, negated) {
+function toOptionKey(arg, negated, opts) {
   var key = arg.replace(/^-+/, '');
   if(negated) key = key.replace(/^no-/, '')
   key = camelcase(key);
-  return key;
+  return alias(key, opts);
 }
 
 function unique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
-function flags(arg, output) {
+function alias(key, opts) {
+  var alias = opts.alias, z, keys;
+  for(z in alias) {
+    keys = z.split(/\s+/);
+    if(keys.indexOf(key) > -1) return alias[z];
+  }
+  return key;
+}
+
+function flags(arg, output, opts) {
   arg = arg.replace(/^-/, '');
   var keys = arg.split('');
   keys = keys.filter(unique);
   keys.forEach(function(key) {
+    key = alias(key, opts);
     output.flags[key] = true;
   })
 }
 
-function options(arg, output, next) {
+function options(arg, output, next, opts) {
   var equals = arg.indexOf('='), value, result = false, negated;
   var flag = false, key;
   if(!next || (next && next.indexOf('-') == 0 && equals == -1)) {
@@ -41,7 +51,7 @@ function options(arg, output, next) {
     result = true;
   }
   negated = negate.test(arg);
-  key = toOptionKey(arg, negated);
+  key = toOptionKey(arg, negated, opts);
   if(flag) {
     output.flags[key] = negated ? false : true;
   }else{
@@ -57,7 +67,8 @@ function options(arg, output, next) {
   return result;
 }
 
-function parse(args) {
+function parse(args, opts) {
+  opts = opts || {}; opts.alias = opts.alias || {};
   args = args || process.argv.slice(2);
   args = args.slice(0);
   var output = {flags: {}, options: {},
@@ -72,9 +83,9 @@ function parse(args) {
       output.unparsed = output.unparsed.concat(args.slice(i));
       break;
     }else if(sre.test(arg)) {
-      flags(arg, output);
+      flags(arg, output, opts);
     }else if(lre.test(arg)) {
-      skip = options(arg, output, args[0]);
+      skip = options(arg, output, args[0], opts);
       if(skip) {
         args.shift(); i--; l--;
         continue;

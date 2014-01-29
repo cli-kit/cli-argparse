@@ -6,7 +6,6 @@ This module does not define any options or any program requirements it simply pa
 
 ## Features
 
-* Lightweight, zero dependencies and less than 100 lines of code
 * Supports multiple option values as arrays
 * Supports long flag negations, eg: `--no-color`
 * Supports `--option=value` and `--option value`
@@ -36,9 +35,10 @@ var result = parse();  // use process.argv.slice(2)
 console.dir(result);
 ```
 
-### parse(args)
+### parse(args, [options])
 
 * `args`: Specific arguments to parse, default is `process.argv.slice(2)`.
+* `options`: Parsing configuration options.
 
 Returns a result object.
 
