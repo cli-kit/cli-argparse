@@ -33,7 +33,7 @@ function flags(arg, output) {
 function options(arg, output, next) {
   var equals = arg.indexOf('='), value, result = false, negated;
   var flag = false, key;
-  if(next && next.indexOf('-') == 0 && equals == -1) {
+  if(!next || (next && next.indexOf('-') == 0 && equals == -1)) {
     flag = true;
   }
   if(equals > -1) {
