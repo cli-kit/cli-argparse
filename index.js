@@ -25,14 +25,17 @@ function alias(key, opts) {
 }
 
 function flags(arg, output, next, opts) {
-  var result = alias(arg, opts), keys, skip = false;
+  var result = alias(arg, opts), keys, skip = false, i = 0, key;
   if(result.aliased) output.flags[result.key] = true;
-  arg = arg.replace(/^-/, '');
-  keys = arg.split('');
-  keys.forEach(function(key) {
+  arg = arg.replace(/^-/, ''); keys = arg.split('');
+  for(;i < keys.length;i++, key = keys[i]) {
+    key = keys[i];
+    if(i == keys.length - 1 && opts.options.indexOf(short + key) > -1) {
+      return options(short + key, output, next, opts);
+    }
     result = alias(short + key, opts);
     output.flags[result.aliased ? result.key : key] = true;
-  })
+  }
   return skip;
 }
 
