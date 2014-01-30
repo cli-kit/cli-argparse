@@ -1,11 +1,6 @@
 var short = '-', long = '--';
 var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /^--no-/;
-
-function camelcase(flag) {
-  return flag.split('-').reduce(function(str, word){
-    return str + word[0].toUpperCase() + word.slice(1);
-  });
-}
+var camelcase = require('cli-util').camelcase;
 
 function toOptionKey(arg, negated, opts) {
   var result = alias(arg, opts), key;

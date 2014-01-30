@@ -1,6 +1,6 @@
 {
   "name": "cli-argparse",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lightweight argument parser",
   "author": "muji <noop@xpm.io>",
   "repository": {
@@ -21,6 +21,9 @@
     "arguments",
     "options"
   ],
+  "dependencies": {
+    "cli-util": "~1.0.0"
+  },
   "devDependencies": {
     "mocha": "~1.17.0",
     "chai": "~1.8.1"
