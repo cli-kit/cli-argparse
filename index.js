@@ -14,13 +14,13 @@ function alias(key, opts) {
   var alias = opts.alias, z, keys;
   for(z in alias) {
     keys = z.split(/\s+/);
-    if(keys.indexOf(key) > -1) return {key: alias[z], aliased: true};
+    if(keys.indexOf(key) > -1) return {key: alias[z], aliased: true, negated: /--no-/.test(z)};
   }
   return {key: key, aliased: false};
 }
 
 function flags(arg, output, next, opts) {
-  var result = alias(arg, opts), keys, skip = false, i = 0, key;
+  var result = alias(arg, opts), keys, skip = false, i = 0, key, v = true;
   if(result.aliased) output.flags[result.key] = true;
   arg = arg.replace(/^-/, ''); keys = arg.split('');
   for(;i < keys.length;i++, key = keys[i]) {
@@ -29,7 +29,9 @@ function flags(arg, output, next, opts) {
       return options(short + key, output, next, opts);
     }
     result = alias(short + key, opts);
-    output.flags[result.aliased ? result.key : key] = true;
+    // short option flag has an alias component that negates (--no-)
+    if(result.negated) v = false;
+    output.flags[result.aliased ? result.key : key] = v;
   }
   return skip;
 }
