@@ -29,4 +29,17 @@ describe('cli-argparse:', function() {
     expect(result.flags.color).to.eql(false);
     done();
   });
+  it('should handle short option negation by alias', function(done) {
+    var config = {
+      alias: {
+        '-c --color': 'color',
+        '-C --no-color': 'color'},
+      flags: [ '-c', '--color', '-C', '--no-color']
+    }
+    var args = ['-cCc'];
+    var result = parse(args, config);
+    expect(result.raw).to.eql(args);
+    expect(result.flags.color).to.eql(true);
+    done();
+  });
 })

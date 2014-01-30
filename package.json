@@ -1,6 +1,6 @@
 {
   "name": "cli-argparse",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Lightweight argument parser",
   "author": "muji <noop@xpm.io>",
   "repository": {
