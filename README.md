@@ -48,14 +48,12 @@ var result = parse(args);
   "flags": {
     "x": true,
     "v": true,
-    "d": true
+    "d": true,
+    "color": false
   },
   "options": {
     "port": "80",
-    "file": [
-      "file.txt",
-      "file.json"
-    ]
+    "file": "file.json"
   },
   "raw": [
     "server",
@@ -64,7 +62,8 @@ var result = parse(args);
     "--port=80",
     "--file=file.txt",
     "--file",
-    "file.json"
+    "file.json",
+    "--no-color"
   ],
   "stdin": false,
   "unparsed": [
