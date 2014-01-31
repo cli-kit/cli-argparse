@@ -35,9 +35,11 @@ var args = [
   'start',
   '-xvd',
   '--port=80',
-  '--file=file.txt',
-  '--file',
-  'file.json',
+  '--config',
+  '-',
+  '--config=config.json',
+  '--log',
+  'server.log',
   '--no-color'
 ];
 var result = parse(args);
@@ -48,25 +50,30 @@ var result = parse(args);
   "flags": {
     "x": true,
     "v": true,
-    "d": true
+    "d": true,
+    "color": false
   },
   "options": {
     "port": "80",
-    "file": [
-      "file.txt",
-      "file.json"
-    ]
+    "config": [
+      "-",
+      "config.json"
+    ],
+    "log": "server.log"
   },
   "raw": [
     "server",
     "start",
     "-xvd",
     "--port=80",
-    "--file=file.txt",
-    "--file",
-    "file.json"
+    "--config",
+    "-",
+    "--config=config.json",
+    "--log",
+    "server.log",
+    "--no-color"
   ],
-  "stdin": false,
+  "stdin": true,
   "unparsed": [
     "server",
     "start"

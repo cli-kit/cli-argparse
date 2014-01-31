@@ -39,12 +39,14 @@ function options(arg, output, next, opts) {
   var equals = arg.indexOf('='), value, result = false, negated, key;
   var flag = (!next && !~equals)
     || (next && (!next.indexOf(short) && next != short) && !~equals);
-  if(next == short) output.stdin = true;
   if(~equals) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
   }
   if(~opts.flags.indexOf(arg)) flag = true;
-  if(next && !flag && !~equals) value = next; result = true;
+  if(next && !flag && !~equals) {
+    value = next; result = true;
+  }
+  if(next == short || value == short) output.stdin = true;
   negated = negate.test(arg);
   key = toOptionKey(arg, negated, opts);
   if(flag) {
