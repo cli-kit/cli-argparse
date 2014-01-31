@@ -23,4 +23,12 @@ describe('cli-argparse:', function() {
     expect(result.stdin).to.eql(false);
     done();
   });
+  it('should accept stdin as value', function(done) {
+    var args = ['--file', '-'];
+    var result = parse(args);
+    expect(result.raw).to.eql(args);
+    expect(result.stdin).to.eql(true);
+    expect(result.options.file).to.eql('-');
+    done();
+  });
 })

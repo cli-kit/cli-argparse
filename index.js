@@ -39,7 +39,8 @@ function flags(arg, output, next, opts) {
 function options(arg, output, next, opts) {
   var equals = arg.indexOf('='), value, result = false, negated, key;
   var flag = (!next && !~equals)
-    || (next && next.indexOf(short) == 0 && !~equals);
+    || (next && (next.indexOf(short) == 0 && next != short) && !~equals);
+  if(next == short) output.stdin = true;
   if(~equals) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
   }
