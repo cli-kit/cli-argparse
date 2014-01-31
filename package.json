@@ -26,11 +26,11 @@
   },
   "devDependencies": {
     "mocha": "~1.17.0",
-    "chai": "~1.8.1"
+    "chai": "~1.9.0"
   },
   "engine": [ "node >= 0.10.21" ],
   "scripts": {
-    "test": "mocha -u bdd --recursive --reporter list -A test/unit/"
+    "test": "./node_modules/.bin/mocha -u bdd --recursive --reporter list -A test/unit/"
   },
   "config" : {}
 }
