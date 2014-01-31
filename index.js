@@ -39,7 +39,7 @@ function flags(arg, output, next, opts) {
 function options(arg, output, next, opts) {
   var equals = arg.indexOf('='), value, result = false, negated, key;
   var flag = (!next && !~equals)
-    || (next && (next.indexOf(short) == 0 && next != short) && !~equals);
+    || (next && (!next.indexOf(short) && next != short) && !~equals);
   if(next == short) output.stdin = true;
   if(~equals) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
@@ -65,7 +65,7 @@ function options(arg, output, next, opts) {
   return result;
 }
 
-function parse(args, opts) {
+module.exports = function parse(args, opts) {
   opts = opts || {}; opts.alias = opts.alias || {};
   opts.flags = opts.flags || [], opts.options = opts.options || [];
   args = args || process.argv.slice(2); args = args.slice(0);
@@ -94,5 +94,3 @@ function parse(args, opts) {
   }
   return output;
 }
-
-module.exports = parse;
