@@ -5,9 +5,11 @@ var args = [
   'start',
   '-xvd',
   '--port=80',
-  '--file=file.txt',
-  '--file',
-  'file.json',
+  '--config',
+  '-',
+  '--config=config.json',
+  '--log',
+  'server.log',
   '--no-color'
 ];
 var result = parse(args);
