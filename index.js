@@ -44,9 +44,7 @@ function options(arg, output, next, opts) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
   }
   if(~opts.flags.indexOf(arg)) flag = true;
-  if(next && !flag && !~equals) {
-    value = next; result = true;
-  }
+  if(next && !flag && !~equals) value = next; result = true;
   negated = negate.test(arg);
   key = toOptionKey(arg, negated, opts);
   if(flag) {
