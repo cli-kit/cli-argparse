@@ -21,10 +21,10 @@ function alias(key, opts) {
 }
 
 function flags(arg, output, next, opts) {
-  var result = alias(arg, opts), keys, skip = false, i = 0, key, v = true;
+  var result = alias(arg, opts), keys, i = 0, key, v = true;
   if(result.aliased) output.flags[result.key] = v;
   arg = arg.replace(/^-/, ''); keys = arg.split('');
-  for(;i < keys.length;i++, key = keys[i]) {
+  for(;i < keys.length; i++) {
     key = keys[i]; v = true;
     if(i == keys.length - 1 && ~opts.options.indexOf(short + key)) {
       return options(short + key, output, next, opts);
@@ -33,7 +33,6 @@ function flags(arg, output, next, opts) {
     if(result.negated) v = false;
     output.flags[result.aliased ? result.key : key] = v;
   }
-  return skip;
 }
 
 function options(arg, output, next, opts) {
