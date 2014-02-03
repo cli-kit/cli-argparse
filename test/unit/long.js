@@ -18,4 +18,26 @@ describe('cli-argparse:', function() {
       .to.eql(['file.txt', 'file.json']);
     done();
   });
+  it('should accepted value with hyphen on forced option', function(done) {
+    var options = ['--file'];
+    var args = ['--file', '-file.txt'];
+    var result = parse(args, {options: options});
+    expect(result.raw).to.eql(args);
+    expect(result.options.file).to.eql('-file.txt');
+    done();
+  });
+  it('should allow value with hyphen (short option equality)', function(done) {
+    var args = ['-int=-1'];
+    var result = parse(args);
+    expect(result.raw).to.eql(args);
+    expect(result.options.int).to.eql('-1');
+    done();
+  });
+  it('should allow value with hyphen (long option equality)', function(done) {
+    var args = ['--integer=-1'];
+    var result = parse(args);
+    expect(result.raw).to.eql(args);
+    expect(result.options.integer).to.eql('-1');
+    done();
+  });
 })

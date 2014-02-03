@@ -35,9 +35,9 @@ function flags(arg, output, next, opts) {
   }
 }
 
-function options(arg, output, next, opts) {
+function options(arg, output, next, opts, force) {
   var equals = arg.indexOf('='), value, result = false, negated, key;
-  var flag = (!next && !~equals)
+  var flag = force ? !force : (!next && !~equals)
     || (next && (!next.indexOf(short) && next != short) && !~equals);
   if(~equals) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
@@ -70,20 +70,20 @@ module.exports = function parse(args, opts) {
   args = args || process.argv.slice(2); args = args.slice(0);
   var output = {flags: {}, options: {},
     raw: args.slice(0), stdin: false, unparsed: []};
-  var i, arg, l = args.length, key, skip, larg, sarg;
+  var i, arg, l = args.length, key, skip, larg, force;
   for(i = 0;i < l;i++) {
     if(!args[0]) break;
     arg = '' + args.shift(), skip = false;
     larg = lre.test(arg) || ~arg.indexOf('=');
     opts.options.forEach(function(o){
-      if(~arg.indexOf(o)) larg = true;
+      if(~arg.indexOf(o)) larg = true; force = true;
     });
     if(arg == short) {
       output.stdin = true;
     }else if(arg == long) {
       output.unparsed = output.unparsed.concat(args.slice(i)); break;
     }else if(larg) {
-      skip = options(arg, output, args[0], opts);
+      skip = options(arg, output, args[0], opts, force);
     }else if(sre.test(arg)) {
       skip = flags(arg, output, args[0], opts);
     }else{
