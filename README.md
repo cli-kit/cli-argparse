@@ -108,13 +108,15 @@ Aliases are mapped on the raw argument name, to map `-v | --verbose` to a `verbo
 
 ##### Flags
 
-Use the flags array when you need to force a long argument to be treated as a
-flag, for example `['--syntax-highlight']`.
+Use the flags array when you need to force a long argument to be treated as a flag, for example `['--syntax-highlight']`.
 
 ##### Options
 
-Use the options array when you need to treat a short argument as accepting a
-value, for example `['-f']`.
+Use the options array when you need to treat a short argument as accepting a value, for example `['-f']`.
+
+##### Strict
+
+A `boolean` that indicates that only known arguments (those declared in the options and flags properties) are accepted, all other arguments will be placed in the unparsed array.
 
 ### Result
 
