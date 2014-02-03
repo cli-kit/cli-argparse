@@ -96,6 +96,16 @@ console.dir(result);
 
 Returns a result object.
 
+#### Result
+
+The result object contains the fields:
+
+* `flags`: Object containing arguments treated as flags.
+* `options`: Object containing arguments treated as options with values.
+* `raw`: Array of the raw arguments parsed. 
+* `stdin`: Boolean indicating whether `-` is present in the argument list.
+* `unparsed`: Array of values that were not parsed.
+
 #### Options
 
 * `alias`: Map of argument names to property names.
@@ -117,16 +127,6 @@ Use the options array when you need to treat a short argument as accepting a val
 ##### Strict
 
 A `boolean` that indicates that only known arguments (those declared in the options and flags properties) are accepted, all other arguments will be placed in the unparsed array.
-
-### Result
-
-The result object contains the fields:
-
-* `flags`: Object containing arguments treated as flags.
-* `options`: Object containing arguments treated as options with values.
-* `raw`: Array of the raw arguments parsed. 
-* `stdin`: Boolean indicating whether `-` is present in the argument list.
-* `unparsed`: Array of values that were not parsed.
 
 ## License
 
