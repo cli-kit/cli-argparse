@@ -2,7 +2,7 @@ var short = '-', long = '--';
 var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /--no-/;
 var camelcase = require('cli-util').camelcase;
 
-function toOptionKey(arg, negated, opts) {
+function optkey(arg, negated, opts) {
   var result = alias(arg, opts), key;
   if(result.aliased) return result.key;
   key = arg.replace(/^-+/, '');
@@ -48,7 +48,7 @@ function options(arg, output, next, opts, force) {
   }
   if(next == short || value == short) output.stdin = true;
   negated = negate.test(arg);
-  key = toOptionKey(arg, negated, opts);
+  key = optkey(arg, negated, opts);
   if(flag) {
     output.flags[key] = negated ? false : true;
   }else{
