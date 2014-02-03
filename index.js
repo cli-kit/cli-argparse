@@ -20,22 +20,22 @@ function alias(key, opts) {
   return {key: key, aliased: false};
 }
 
-function flags(arg, output, next, opts) {
+function flags(arg, out, next, opts) {
   var result = alias(arg, opts), keys, i = 0, key, v = true;
-  if(result.aliased) output.flags[result.key] = v;
+  if(result.aliased) out.flags[result.key] = v;
   arg = arg.replace(/^-/, ''); keys = arg.split('');
   for(;i < keys.length; i++) {
     key = keys[i]; v = true;
     if(i == keys.length - 1 && ~opts.options.indexOf(short + key)) {
-      return options(short + key, output, next, opts);
+      return options(short + key, out, next, opts);
     }
     result = alias(short + key, opts);
     if(result.negated) v = false;
-    output.flags[result.aliased ? result.key : key] = v;
+    out.flags[result.aliased ? result.key : key] = v;
   }
 }
 
-function options(arg, output, next, opts, force) {
+function options(arg, out, next, opts, force) {
   var equals = arg.indexOf('='), value, result = false, negated, key;
   var flag = force ? !force : (!next && !~equals)
     || (next && (!next.indexOf(short) && next != short) && !~equals);
@@ -46,50 +46,56 @@ function options(arg, output, next, opts, force) {
   if(next && !flag && !~equals) {
     value = next; result = true;
   }
-  if(next == short || value == short) output.stdin = true;
+  if(next == short || value == short) out.stdin = true;
   negated = negate.test(arg);
   key = optkey(arg, negated, opts);
   if(flag) {
-    output.flags[key] = negated ? false : true;
+    out.flags[key] = negated ? false : true;
   }else{
-    if(!output.options[key]) {
-      output.options[key] = value;
+    if(!out.options[key]) {
+      out.options[key] = value;
     }else{
-      if(!Array.isArray(output.options[key])) {
-        output.options[key] = [output.options[key]];
+      if(!Array.isArray(out.options[key])) {
+        out.options[key] = [out.options[key]];
       }
-      output.options[key].push(value);
+      out.options[key].push(value);
     }
   }
   return result;
 }
 
 module.exports = function parse(args, opts) {
+  function exists(arg, list) {
+    for(var i = 0;i < list.length;i++) {
+      if(~arg.indexOf(list[i])) return true;
+    }
+  }
   opts = opts || {}; opts.alias = opts.alias || {};
-  opts.flags = opts.flags || [], opts.options = opts.options || [];
+  opts.flags = opts.flags || []; opts.options = opts.options || [];
   args = args || process.argv.slice(2); args = args.slice(0);
-  var output = {flags: {}, options: {},
-    raw: args.slice(0), stdin: false, unparsed: []};
-  var i, arg, l = args.length, key, skip, larg, force;
+  var out = {flags: {}, options: {},
+    raw: args.slice(0), stdin: false, unparsed: [], strict: !!opts.strict};
+  var i, arg, l = args.length, key, skip, larg, force, raw, equals;
   for(i = 0;i < l;i++) {
     if(!args[0]) break;
     arg = '' + args.shift(); skip = false; force = false;
+    equals = arg.indexOf('='); raw = ~equals ? arg.slice(0, equals) : arg;
     larg = lre.test(arg) || ~arg.indexOf('=');
-    opts.options.forEach(function(o){
-      if(~arg.indexOf(o)) larg = true; force = true;
-    });
-    if(arg == short) {
-      output.stdin = true;
+    if(exists(arg, opts.options)) larg = true, force = true;
+    if(opts.strict && !exists(raw, opts.options) && !exists(raw, opts.flags)) {
+      out.unparsed.push(arg);
+    }else if(arg == short) {
+      out.stdin = true;
     }else if(arg == long) {
-      output.unparsed = output.unparsed.concat(args.slice(i)); break;
+      out.unparsed = out.unparsed.concat(args.slice(i)); break;
     }else if(larg) {
-      skip = options(arg, output, args[0], opts, force);
+      skip = options(arg, out, args[0], opts, force);
     }else if(sre.test(arg)) {
-      skip = flags(arg, output, args[0], opts);
+      skip = flags(arg, out, args[0], opts);
     }else{
-      output.unparsed.push(arg);
+      out.unparsed.push(arg);
     }
     if(skip) args.shift(); l--; i--;
   }
-  return output;
+  return out;
 }
