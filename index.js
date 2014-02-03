@@ -35,7 +35,7 @@ function flags(arg, out, next, opts) {
   }
 }
 
-function options(arg, out, next, opts, force, equals) {
+function options(arg, out, next, opts, force) {
   var equals = arg.indexOf('='), value, negated, key;
   var flag = force ? !force : (!next && !~equals)
     || (next && (!next.indexOf(short) && next != short) && !~equals);
@@ -82,7 +82,7 @@ module.exports = function parse(args, opts) {
     }else if(arg == long) {
       out.unparsed = out.unparsed.concat(args.slice(i)); break;
     }else if(opt || ~equals || lre.test(arg)) {
-      skip = options(arg, out, args[0], opts, opt, equals);
+      skip = options(arg, out, args[0], opts, opt);
     }else if(sre.test(arg)) {
       skip = flags(arg, out, args[0], opts);
     }else{
