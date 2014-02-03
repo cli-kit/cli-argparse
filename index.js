@@ -35,8 +35,8 @@ function flags(arg, out, next, opts) {
   }
 }
 
-function options(arg, out, next, opts, force) {
-  var equals = arg.indexOf('='), value, result = false, negated, key;
+function options(arg, out, next, opts, force, equals) {
+  var equals = arg.indexOf('='), value, negated, key;
   var flag = force ? !force : (!next && !~equals)
     || (next && (!next.indexOf(short) && next != short) && !~equals);
   if(~equals) {
@@ -44,7 +44,7 @@ function options(arg, out, next, opts, force) {
   }
   if(~opts.flags.indexOf(arg.replace(negate, long))) flag = true;
   if(next && !flag && !~equals) {
-    value = next; result = true;
+    value = next;
   }
   if(next == short || value == short) out.stdin = true;
   negated = negate.test(arg);
@@ -59,34 +59,32 @@ function options(arg, out, next, opts, force) {
       out.options[key].push(value);
     }
   }
-  return result;
+  return (value == next);
 }
 
 module.exports = function parse(args, opts) {
   function exists(arg, list) {
-    for(var i = 0;i < list.length;i++) {if(~arg.indexOf(list[i])) return true;}
+    for(var i = 0;i < list.length;i++){if(~arg.indexOf(list[i])) return true;}
   }
   opts = opts || {}; opts.alias = opts.alias || {};
   opts.flags = opts.flags || []; opts.options = opts.options || [];
   args = args || process.argv.slice(2); args = args.slice(0);
-  var out = {flags: {}, options: {},
-    raw: args.slice(0), stdin: false, unparsed: [], strict: !!opts.strict};
-  var i, arg, l = args.length, key, skip, larg, raw, equals, flag, opt;
+  var out = {flags: {}, options: {}, raw: args.slice(0), stdin: false,
+    unparsed: [], strict: !!opts.strict};
+  var i, arg, l = args.length, skip, raw, equals, flag, opt;
   for(i = 0;i < l;i++) {
-    if(!args[0]) break;
-    arg = '' + args.shift(); skip = false;
+    if(!args[0]) break; arg = '' + args.shift(); skip = false;
     equals = arg.indexOf('='); raw = ~equals ? arg.slice(0, equals) : arg;
     raw = raw.replace(negate, long); flag = exists(raw, opts.flags);
-    opt = exists(arg, opts.options); larg = lre.test(arg) || ~equals;
-    if(opt) larg = true;
+    opt = exists(arg, opts.options);
     if(opts.strict && (!opt && !flag)) {
       out.unparsed.push(arg);
     }else if(arg == short) {
       out.stdin = true;
     }else if(arg == long) {
       out.unparsed = out.unparsed.concat(args.slice(i)); break;
-    }else if(larg) {
-      skip = options(arg, out, args[0], opts, opt);
+    }else if(opt || ~equals || lre.test(arg)) {
+      skip = options(arg, out, args[0], opts, opt, equals);
     }else if(sre.test(arg)) {
       skip = flags(arg, out, args[0], opts);
     }else{
