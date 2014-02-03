@@ -43,9 +43,7 @@ function options(arg, out, next, opts, force, equals) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
   }
   if(~opts.flags.indexOf(arg.replace(negate, long))) flag = true;
-  if(next && !flag && !~equals) {
-    value = next;
-  }
+  if(next && !flag && !~equals) value = next;
   if(next == short || value == short) out.stdin = true;
   negated = negate.test(arg);
   key = optkey(arg, negated, opts);
