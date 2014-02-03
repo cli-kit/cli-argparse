@@ -13,6 +13,7 @@ This module does not define any options or any program requirements it simply pa
 * Treat `-` as special stdin flag
 * Stop argument parsing on `--`
 * Comprehensive test suite
+* 100% code coverage
 
 ## Install
 
