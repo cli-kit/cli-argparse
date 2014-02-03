@@ -11,10 +11,10 @@ function optkey(arg, negated, opts) {
 }
 
 function alias(key, opts) {
-  var alias = opts.alias, z, keys;
-  for(z in alias) {
+  var z, keys;
+  for(z in opts.alias) {
     keys = z.split(/\s+/);
-    if(~keys.indexOf(key)) return {key: alias[z],
+    if(~keys.indexOf(key)) return {key: opts.alias[z],
       aliased: true, negated: negate.test(z)};
   }
   return {key: key, aliased: false};
