@@ -73,7 +73,7 @@ module.exports = function parse(args, opts) {
   var i, arg, l = args.length, key, skip, larg, force;
   for(i = 0;i < l;i++) {
     if(!args[0]) break;
-    arg = '' + args.shift(), skip = false;
+    arg = '' + args.shift(); skip = false; force = false;
     larg = lre.test(arg) || ~arg.indexOf('=');
     opts.options.forEach(function(o){
       if(~arg.indexOf(o)) larg = true; force = true;
