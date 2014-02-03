@@ -89,7 +89,7 @@ var result = parse();
 console.dir(result);
 ```
 
-### parse(args, [options])
+### parse([args], [options])
 
 * `args`: Specific arguments to parse, default is `process.argv.slice(2)`.
 * `options`: Parsing configuration options.
@@ -111,6 +111,8 @@ The result object contains the fields:
 * `alias`: Map of argument names to property names.
 * `flags`: Array of argument names to be treated as flags.
 * `options`: Array of argument names to be treated as options.
+
+Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
 
 ##### Aliases
 
