@@ -23,6 +23,13 @@ describe('cli-argparse:', function() {
     expect(result.options.name).to.eql('file.txt');
     done();
   });
+  it('should alias negated long option', function(done) {
+    var aliases = {'--highlight-syntax': 'highlight'};
+    var args = ['--no-highlight-syntax'];
+    var result = parse(args, {alias: aliases});
+    expect(result.flags.highlight).to.eql(false);
+    done();
+  });
   it('should alias multiple long options', function(done) {
     var aliases = {'--file-name': 'name'};
     var args = ['--file-name', 'file.txt', '--file-name=file.json'];

@@ -3,7 +3,7 @@ var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /--no-/;
 var camelcase = require('cli-util').camelcase;
 
 function optkey(arg, negated, opts) {
-  var result = alias(arg, opts), key;
+  var result = alias(arg.replace(negate, long), opts), key;
   if(result.aliased) return result.key;
   key = arg.replace(/^-+/, '');
   if(negated) key = key.replace(/^no-/, '');
@@ -42,7 +42,7 @@ function options(arg, out, next, opts, force) {
   if(~equals) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
   }
-  if(~opts.flags.indexOf(arg)) flag = true;
+  if(~opts.flags.indexOf(arg.replace(negate, long))) flag = true;
   if(next && !flag && !~equals) {
     value = next; result = true;
   }
@@ -55,9 +55,7 @@ function options(arg, out, next, opts, force) {
     if(!out.options[key]) {
       out.options[key] = value;
     }else{
-      if(!Array.isArray(out.options[key])) {
-        out.options[key] = [out.options[key]];
-      }
+      if(!Array.isArray(out.options[key])) out.options[key] = [out.options[key]];
       out.options[key].push(value);
     }
   }
@@ -66,30 +64,29 @@ function options(arg, out, next, opts, force) {
 
 module.exports = function parse(args, opts) {
   function exists(arg, list) {
-    for(var i = 0;i < list.length;i++) {
-      if(~arg.indexOf(list[i])) return true;
-    }
+    for(var i = 0;i < list.length;i++) {if(~arg.indexOf(list[i])) return true;}
   }
   opts = opts || {}; opts.alias = opts.alias || {};
   opts.flags = opts.flags || []; opts.options = opts.options || [];
   args = args || process.argv.slice(2); args = args.slice(0);
   var out = {flags: {}, options: {},
     raw: args.slice(0), stdin: false, unparsed: [], strict: !!opts.strict};
-  var i, arg, l = args.length, key, skip, larg, force, raw, equals;
+  var i, arg, l = args.length, key, skip, larg, raw, equals, flag, opt;
   for(i = 0;i < l;i++) {
     if(!args[0]) break;
-    arg = '' + args.shift(); skip = false; force = false;
+    arg = '' + args.shift(); skip = false;
     equals = arg.indexOf('='); raw = ~equals ? arg.slice(0, equals) : arg;
-    larg = lre.test(arg) || ~arg.indexOf('=');
-    if(exists(arg, opts.options)) larg = true, force = true;
-    if(opts.strict && !exists(raw, opts.options) && !exists(raw, opts.flags)) {
+    raw = raw.replace(negate, long); flag = exists(raw, opts.flags);
+    opt = exists(arg, opts.options); larg = lre.test(arg) || ~equals;
+    if(opt) larg = true;
+    if(opts.strict && (!opt && !flag)) {
       out.unparsed.push(arg);
     }else if(arg == short) {
       out.stdin = true;
     }else if(arg == long) {
       out.unparsed = out.unparsed.concat(args.slice(i)); break;
     }else if(larg) {
-      skip = options(arg, out, args[0], opts, force);
+      skip = options(arg, out, args[0], opts, opt);
     }else if(sre.test(arg)) {
       skip = flags(arg, out, args[0], opts);
     }else{
