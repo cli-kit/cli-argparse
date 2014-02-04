@@ -90,5 +90,9 @@ module.exports = function parse(args, opts) {
     }
     if(skip) args.shift(); l--; i--;
   }
+  if(opts.flat) {
+    for(var z in out.flags) {out.options[z] = out.flags[z];}
+    delete out.flags;
+  }
   return out;
 };

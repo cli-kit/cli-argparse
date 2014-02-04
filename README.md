@@ -113,6 +113,7 @@ The result object contains the fields:
 * `flags`: Array of argument names to be treated as flags.
 * `options`: Array of argument names to be treated as options.
 * `strict`: A boolean that indicates that only arguments specified as `options` or `flags` should be parsed.
+* `flat`: A boolean that creates a flat result structure, when this option is specified the result object will not have a `flags` map, instead all flags and options will be in the `options` property of the result.
 
 Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
 
