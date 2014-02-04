@@ -112,8 +112,8 @@ The result object contains the fields:
 * `alias`: Map of argument names to property names.
 * `flags`: Array of argument names to be treated as flags.
 * `options`: Array of argument names to be treated as options.
-* `strict`: A boolean that indicates that only arguments specified as `options` or `flags` should be parsed.
-* `flat`: A boolean that creates a flat result structure, when this option is specified the result object will not have a `flags` property, instead all flags and options will be in the `options` property of the result.
+* `strict`: A boolean that indicates only arguments specified as `options` or `flags` should be parsed.
+* `flat`: A boolean that creates a flat result structure.
 
 Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
 
@@ -136,6 +136,8 @@ A `boolean` that indicates that only known arguments (those declared in the opti
 ##### Flat
 
 Creating a flat result can be useful if you are certain that there are no naming collisions, typically this can be achieved by providing hints using `flags` and `options`.
+
+When this option is specified the result object will not have a `flags` property, instead all flags and options will be in the `options` property of the result.
 
 ## License
 
