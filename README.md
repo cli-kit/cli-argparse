@@ -112,6 +112,7 @@ The result object contains the fields:
 * `alias`: Map of argument names to property names.
 * `flags`: Array of argument names to be treated as flags.
 * `options`: Array of argument names to be treated as options.
+* `strict`: A boolean that indicates that only arguments specified as `options` or `flags` should be parsed.
 
 Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
 
