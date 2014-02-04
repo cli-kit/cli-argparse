@@ -133,6 +133,10 @@ Use the options array when you need to treat a short argument as accepting a val
 
 A `boolean` that indicates that only known arguments (those declared in the options and flags properties) are accepted, all other arguments will be placed in the unparsed array.
 
+##### Flat
+
+Creating a flat result can be useful if you are certain that there are no naming collisions, typically this can be achieved by providing hints using `flags` and `options`.
+
 ## License
 
 Everything is [MIT](http://en.wikipedia.org/wiki/MIT_License). Read the [license](/LICENSE) if you feel inclined.
