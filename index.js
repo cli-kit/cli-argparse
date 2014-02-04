@@ -37,8 +37,8 @@ function flags(arg, out, next, opts) {
 
 function options(arg, out, next, opts, force) {
   var equals = arg.indexOf('='), value, negated, key;
-  var flag = force ? !force : (!next && !~equals)
-    || (next && (!next.indexOf(short) && next != short) && !~equals);
+  var flag = force ? !force : (!next && !~equals) ||
+    (next && (!next.indexOf(short) && next != short) && !~equals);
   if(~equals) {
     value = arg.slice(equals + 1); arg = arg.slice(0, equals);
   }
@@ -91,4 +91,4 @@ module.exports = function parse(args, opts) {
     if(skip) args.shift(); l--; i--;
   }
   return out;
-}
+};
