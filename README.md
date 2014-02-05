@@ -10,6 +10,7 @@ This module does not define any options or any program requirements it simply pa
 * Supports long flag negations, eg: `--no-color`
 * Supports `--option=value`, `--option value` and `option=value`
 * Expands short flags such as `-xvf`
+* Assignment on last flag expansion `-xvf file.tgz`
 * Treat `-` as special stdin flag
 * Stop argument parsing on `--`
 * Comprehensive test suite
