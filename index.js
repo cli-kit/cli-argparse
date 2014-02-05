@@ -2,6 +2,10 @@ var short = '-', long = '--';
 var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /--no-/;
 var camelcase = require('cli-util').camelcase;
 
+function exists(arg, list) {
+  for(var i = 0;i < list.length;i++){if(~arg.indexOf(list[i])) return true;}
+}
+
 function optkey(arg, negated, opts) {
   var result = alias(arg.replace(negate, long), opts), key;
   if(result.aliased) return result.key;
@@ -26,6 +30,10 @@ function flags(arg, out, next, opts) {
   arg = arg.replace(/^-/, ''); keys = arg.split('');
   for(;i < keys.length; i++) {
     key = keys[i]; v = true;
+    if(opts.strict && !exists(short + key, opts.flags)) {
+      out.unparsed.push(short + key);
+      continue;
+    }
     if(i == keys.length - 1 && ~opts.options.indexOf(short + key)) {
       return options(short + key, out, next, opts);
     }
@@ -61,9 +69,6 @@ function options(arg, out, next, opts, force) {
 }
 
 module.exports = function parse(args, opts) {
-  function exists(arg, list) {
-    for(var i = 0;i < list.length;i++){if(~arg.indexOf(list[i])) return true;}
-  }
   opts = opts || {}; opts.alias = opts.alias || {};
   opts.flags = opts.flags || []; opts.options = opts.options || [];
   args = args || process.argv.slice(2); args = args.slice(0);
