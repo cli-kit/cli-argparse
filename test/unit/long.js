@@ -40,4 +40,11 @@ describe('cli-argparse:', function() {
     expect(result.options.integer).to.eql('-1');
     done();
   });
+  it('should allow multiple leading hyphens', function(done) {
+    var args = ['-----syntax-highlight=true'];
+    var result = parse(args);
+    expect(result.raw).to.eql(args);
+    expect(result.options.syntaxHighlight).to.eql('true');
+    done();
+  });
 })
