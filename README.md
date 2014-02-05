@@ -8,7 +8,7 @@ This module does not define any options or any program requirements it simply pa
 
 * Supports multiple option values as arrays
 * Supports long flag negations, eg: `--no-color`
-* Supports `--option=value` and `--option value`
+* Supports `--option=value`, `--option value` and `option=value`
 * Expands short flags such as `-xvf`
 * Treat `-` as special stdin flag
 * Stop argument parsing on `--`
