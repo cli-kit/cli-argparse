@@ -28,6 +28,7 @@ function flags(arg, out, next, opts) {
   var result = alias(arg, opts), keys, i = 0, key, v = true;
   if(result.aliased) out.flags[result.key] = v;
   arg = arg.replace(/^-/, ''); keys = arg.split('');
+  if(keys.length <= 1 && result.aliased) return;
   for(;i < keys.length; i++) {
     key = keys[i]; v = true;
     if(opts.strict && !exists(short + key, opts.flags)) {
@@ -80,6 +81,7 @@ module.exports = function parse(args, opts) {
     equals = arg.indexOf('='); raw = ~equals ? arg.slice(0, equals) : arg;
     raw = raw.replace(negate, long); flag = exists(raw, opts.flags);
     opt = exists(arg, opts.options);
+    //console.log('%s %s', arg, flag);
     if(opts.strict && (!opt && !flag)) {
       out.unparsed.push(arg);
     }else if(arg == short) {
@@ -88,7 +90,7 @@ module.exports = function parse(args, opts) {
       out.unparsed = out.unparsed.concat(args.slice(i)); break;
     }else if(opt || ~equals || lre.test(arg)) {
       skip = options(arg, out, args[0], opts, opt);
-    }else if(sre.test(arg)) {
+    }else if(flag || sre.test(arg)) {
       skip = flags(arg, out, args[0], opts);
     }else{
       out.unparsed.push(arg);

@@ -23,4 +23,12 @@ describe('cli-argparse:', function() {
     expect(result.unparsed).to.eql(['file.txt']);
     done();
   });
+  it('should allow non-hyphenated flag', function(done) {
+    var flags = ['?'];
+    var aliases = {'?': 'help'};
+    var args = ['?'];
+    var result = parse(args, {flags: flags, alias: aliases});
+    expect(result.flags.help).to.eql(true);
+    done();
+  });
 })
