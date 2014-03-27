@@ -3,7 +3,9 @@ var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /--no-/;
 var camelcase = require('cli-util').camelcase;
 
 function exists(arg, list) {
-  for(var i = 0;i < list.length;i++){if(~arg.indexOf(list[i])) return true;}
+  for(var i = 0;i < list.length;i++){
+    if(arg.indexOf(list[i]) === 0) return true;
+  }
 }
 
 function optkey(arg, negated, opts) {
@@ -81,7 +83,7 @@ module.exports = function parse(args, opts) {
     equals = arg.indexOf('='); raw = ~equals ? arg.slice(0, equals) : arg;
     raw = raw.replace(negate, long); flag = exists(raw, opts.flags);
     opt = exists(arg, opts.options);
-    //console.log('%s %s', arg, flag);
+    //console.log('arg: %s, flag: %s, opt: %s', arg, flag, opt);
     if(opts.strict && (!opt && !flag)) {
       out.unparsed.push(arg);
     }else if(arg == short) {
