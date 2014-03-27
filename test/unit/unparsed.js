@@ -24,4 +24,16 @@ describe('cli-argparse:', function() {
       .to.eql(['server', 'start']);
     done();
   });
+  it('should allow hyphens in unparsed', function(done) {
+    var args = [
+      '-v', '--port=80', 'cmd', '/my-client/my-campaign/my-app'];
+    var result = parse(args);
+    //console.dir(result);
+    expect(result.raw).to.eql(args);
+    expect(result.flags.v).to.eql(true);
+    expect(result.options.port).to.be.a('string').that.equals('80');
+    expect(result.unparsed).to.be.an('array')
+      .to.eql(['cmd', '/my-client/my-campaign/my-app']);
+    done();
+  });
 })
