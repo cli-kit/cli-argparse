@@ -46,4 +46,12 @@ describe('cli-argparse:', function() {
     expect(result.flags.f).to.eql(true);
     done();
   });
+
+  it('should alias long option without leading hyphens', function(done) {
+    var aliases = {'file-name': 'name'};
+    var args = ['file-name', 'file.txt'];
+    var result = parse(args, {alias: aliases});
+    expect(result.options.name).to.eql('file.txt');
+    done();
+  });
 })

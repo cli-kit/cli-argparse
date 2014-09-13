@@ -10,7 +10,9 @@ function exists(arg, list) {
 
 function optkey(arg, negated, opts) {
   var result = alias(arg.replace(negate, long), opts), key;
-  if(result.aliased) return result.key;
+  if(result.aliased) {
+    return result.key;
+  }
   key = arg.replace(/^-+/, '');
   if(negated) key = key.replace(/^no-/, '');
   return camelcase(key);
@@ -20,8 +22,10 @@ function alias(key, opts) {
   var z, keys;
   for(z in opts.alias) {
     keys = z.split(/\s+/);
-    if(~keys.indexOf(key)) return {key: opts.alias[z],
-      aliased: true, negated: negate.test(z)};
+    if(~keys.indexOf(key)) return {
+      key: opts.alias[z],
+      aliased: true, negated: negate.test(z),
+      short: sre.test(z), long: lre.test(z)};
   }
   return {key: key, aliased: false};
 }
@@ -77,13 +81,18 @@ module.exports = function parse(args, opts) {
   args = args || process.argv.slice(2); args = args.slice(0);
   var out = {flags: {}, options: {}, raw: args.slice(0), stdin: false,
     unparsed: [], strict: !!opts.strict};
-  var i, arg, l = args.length, skip, raw, equals, flag, opt;
+  var i, arg, l = args.length, skip, raw, equals, flag, opt, info;
   for(i = 0;i < l;i++) {
     if(!args[0]) break; arg = '' + args.shift(); skip = false;
     equals = arg.indexOf('='); raw = ~equals ? arg.slice(0, equals) : arg;
     raw = raw.replace(negate, long); flag = exists(raw, opts.flags);
     opt = exists(arg, opts.options);
-    //console.log('arg: %s, flag: %s, opt: %s', arg, flag, opt);
+    info = alias(arg, opts);
+    if(info.aliased && !info.short && !info.long) {
+      flag = arg.length === 1;
+      opt = arg.length > 1;
+    }
+    //console.log('arg: %s, flag: %s, opt: %s (%j)', arg, flag, opt, def);
     if(opts.strict && (!opt && !flag)) {
       out.unparsed.push(arg);
     }else if(arg == short) {
