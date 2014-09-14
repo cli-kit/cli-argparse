@@ -51,6 +51,24 @@ describe('cli-argparse:', function() {
     done();
   });
 
+  it('should stop parsing on regexp config (empty replacement)', function(done) {
+    var ptn = /^#/;
+    var args = ['-xvf', '#', 'server', '--port=80', '--host=localhost'];
+    var result = parse(args, {stop: [ptn]});
+    //console.dir(result);
+    expect(result.stop).to.eql(ptn);
+    expect(result.raw).to.eql(args);
+    expect(result.flags.x).to.eql(true);
+    expect(result.flags.v).to.eql(true);
+    expect(result.flags.f).to.eql(true);
+    expect(result.unparsed).to.be.an('array');
+    expect(result.unparsed.length).to.eql(3);
+    expect(result.unparsed[0]).to.eql(args[2]);
+    expect(result.unparsed[1]).to.eql(args[3]);
+    expect(result.unparsed[2]).to.eql(args[4]);
+    done();
+  });
+
 
   it('should ignore invalid stop type', function(done) {
     var args = ['-xvf', 'false', 'server', '--port=80', '--host=localhost'];

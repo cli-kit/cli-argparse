@@ -89,7 +89,6 @@ function options(arg, out, next, opts, force) {
 }
 
 function breaks(arg, opts, out) {
-  //if(arg === long) return true;
   var list = (arg === long) ? [long] : [];
   if(Array.isArray(opts.stop) && !list.length) {
     list = opts.stop.filter(function(ptn) {
@@ -135,11 +134,15 @@ module.exports = function parse(args, opts) {
       out.stdin = true;
     }else if(stop = breaks(arg, opts, out)) {
       if(stop instanceof RegExp) {
-        out.unparsed = out.unparsed.concat(
-          [arg.replace(stop, '')].concat(args.slice(i)));
+        //arg = arg.replace(stop, '');
+        //if(arg === '') arg = undefined;
+        stop = arg.replace(stop, '');
+        out.skip = stop ? [stop] : [];
+        out.skip = out.skip.concat(args.slice(i));
       }else{
-        out.unparsed = out.unparsed.concat(args.slice(i));
+        out.skip = args.slice(i);
       }
+      out.unparsed = out.unparsed.concat(out.skip);
       break;
     }else if(opt || ~equals || lre.test(arg)) {
       skip = options(arg, out, args[0], opts, opt);
