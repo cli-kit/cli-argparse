@@ -134,8 +134,6 @@ module.exports = function parse(args, opts) {
       out.stdin = true;
     }else if(stop = breaks(arg, opts, out)) {
       if(stop instanceof RegExp) {
-        //arg = arg.replace(stop, '');
-        //if(arg === '') arg = undefined;
         stop = arg.replace(stop, '');
         out.skip = stop ? [stop] : [];
         out.skip = out.skip.concat(args.slice(i));
@@ -143,6 +141,9 @@ module.exports = function parse(args, opts) {
         out.skip = args.slice(i);
       }
       out.unparsed = out.unparsed.concat(out.skip);
+      if(arg === out.raw[0]) {
+        out.empty = true;
+      }
       break;
     }else if(opt || ~equals || lre.test(arg)) {
       skip = options(arg, out, args[0], opts, opt);

@@ -98,6 +98,17 @@ console.dir(result);
 
 Returns a result object.
 
+#### Options
+
+* `alias`: Map of argument names to property names.
+* `flags`: Array of argument names to be treated as flags.
+* `options`: Array of argument names to be treated as options.
+* `strict`: A boolean that indicates only arguments specified as `options` or `flags` should be parsed.
+* `flat`: A boolean that creates a flat result structure.
+* `stop`: Array of strings or patterns to stop parsing on, the special pattern `--` is always respected first.
+
+Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
+
 #### Result
 
 The result object contains the fields:
@@ -107,18 +118,13 @@ The result object contains the fields:
 * `raw`: Array of the raw arguments parsed. 
 * `stdin`: Boolean indicating whether `-` is present in the argument list.
 * `unparsed`: Array of values that were not parsed.
-
-#### Options
-
-* `alias`: Map of argument names to property names.
-* `flags`: Array of argument names to be treated as flags.
-* `options`: Array of argument names to be treated as options.
-* `strict`: A boolean that indicates only arguments specified as `options` or `flags` should be parsed.
-* `flat`: A boolean that creates a flat result structure.
-
-Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
+* `skip`: Array of args skipped upon `--` or a custom stop pattern.
+* `stop`: If a stop pattern matched this will contain the pattern that matched (string or regexp).
+* `empty`: Set to `true` if a stop pattern matched on the first argument.
 
 ##### Aliases
+
+Aliases allow arguments to map to meaningful property names that will be set on the result object `options` and `flags`.
 
 Aliases are mapped on the raw argument name, to map `-v | --verbose` to a `verbose` property use `{'-v --verbose': 'verbose'}`.
 

@@ -86,4 +86,12 @@ describe('cli-argparse:', function() {
     expect(result.options.host).to.eql('localhost');
     done();
   });
+
+  it('should set noop on stop at arg zero', function(done) {
+    var args = ['--', 'server', '--port=80', '--host=localhost'];
+    var result = parse(args, {stop: [false]});
+    expect(result.stop).to.eql('--');
+    expect(result.empty).to.eql(true);
+    done();
+  });
 })
