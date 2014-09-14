@@ -1,5 +1,5 @@
 var short = '-', long = '--';
-var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /--no-/;
+var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /(--)?no-/;
 var camelcase = require('cli-util').camelcase;
 
 function exists(arg, list) {
@@ -22,10 +22,13 @@ function alias(key, opts) {
   var z, keys;
   for(z in opts.alias) {
     keys = z.split(/\s+/);
-    if(~keys.indexOf(key)) return {
-      key: opts.alias[z],
-      aliased: true, negated: negate.test(z),
-      short: sre.test(z), long: lre.test(z)};
+    if(~keys.indexOf(key) || ~keys.indexOf(key.replace(negate, ''))) {
+      return {
+        key: opts.alias[z].replace(negate, ''),
+        aliased: true, negated: negate.test(key) || negate.test(z),
+        short: sre.test(z), long: lre.test(z)
+      };
+    }
   }
   return {key: key, aliased: false};
 }
@@ -35,6 +38,14 @@ function flags(arg, out, next, opts) {
   if(result.aliased) out.flags[result.key] = v;
   arg = arg.replace(/^-/, ''); keys = arg.split('');
   if(keys.length <= 1 && result.aliased) return;
+
+  // cater for aliased flags without leading hyphens
+  if(result.aliased) {
+    out.flags[result.key] = result.negated ? false : true;
+    return;
+  }
+
+  // flag expansion: -xvf
   for(;i < keys.length; i++) {
     key = keys[i]; v = true;
     if(opts.strict && !exists(short + key, opts.flags)) {
@@ -88,12 +99,18 @@ module.exports = function parse(args, opts) {
     raw = raw.replace(negate, long); flag = exists(raw, opts.flags);
     opt = exists(arg, opts.options);
     info = alias(arg, opts);
+
+    // cater for configured options without leading hyphens
     if(info.aliased && !info.short && !info.long) {
-      flag = arg.length === 1;
-      opt = arg.length > 1;
+      flag = negate.test(arg) || !!~opts.flags.indexOf(arg)
+        || !!~opts.flags.indexOf(long + arg);
+      opt = !!~opts.options.indexOf(arg)
+        || !!~opts.options.indexOf(long + arg);
     }
-    //console.log('arg: %s, flag: %s, opt: %s (%j)', arg, flag, opt, def);
-    if(opts.strict && (!opt && !flag)) {
+
+    //console.log('arg: %s, flag: %s, opt: %s (%j)', arg, flag, opt, info);
+
+    if(opts.strict && (!opt && !flag) && !info.aliased) {
       out.unparsed.push(arg);
     }else if(arg == short) {
       out.stdin = true;

@@ -50,8 +50,24 @@ describe('cli-argparse:', function() {
   it('should alias long option without leading hyphens', function(done) {
     var aliases = {'file-name': 'name'};
     var args = ['file-name', 'file.txt'];
-    var result = parse(args, {alias: aliases});
+    var result = parse(args, {alias: aliases, options: ['file-name']});
     expect(result.options.name).to.eql('file.txt');
+    done();
+  });
+
+  it('should alias flag option without leading hyphens (color)', function(done) {
+    var aliases = {'color': 'color'};
+    var args = ['color'];
+    var result = parse(args, {alias: aliases, flags: ['--color']});
+    expect(result.flags.color).to.eql(true);
+    done();
+  });
+
+  it('should negate flag option without leading hyphens (color)', function(done) {
+    var aliases = {'color': 'color'};
+    var args = ['no-color'];
+    var result = parse(args, {alias: aliases, flags: ['--color']});
+    expect(result.flags.color).to.eql(false);
     done();
   });
 })
