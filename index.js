@@ -22,11 +22,13 @@ function alias(key, opts) {
   var z, keys;
   for(z in opts.alias) {
     keys = z.split(/\s+/);
-    if(~keys.indexOf(key) || ~keys.indexOf(key.replace(negate, ''))) {
+    if(~keys.indexOf(key)
+      || ~keys.indexOf(key.replace(negate, ''))) {
       return {
         key: opts.alias[z].replace(negate, ''),
         aliased: true, negated: negate.test(key) || negate.test(z),
-        short: sre.test(z), long: lre.test(z)
+        short: sre.test(key),
+        long: lre.test(key)
       };
     }
   }
