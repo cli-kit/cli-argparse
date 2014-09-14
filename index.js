@@ -88,13 +88,30 @@ function options(arg, out, next, opts, force) {
   return (value == next);
 }
 
+function breaks(arg, opts, out) {
+  //if(arg === long) return true;
+  var list = (arg === long) ? [long] : [];
+  if(Array.isArray(opts.stop) && !list.length) {
+    list = opts.stop.filter(function(ptn) {
+      if(typeof ptn === 'string' || (ptn instanceof RegExp)) {
+        return (ptn instanceof RegExp) ? ptn.test(arg) : arg === ptn;
+      }
+      return false;
+    })
+  }
+  if(list.length) {
+    out.stop = list[0];
+  }
+  return list.length > 0 ? list[0] : null;
+}
+
 module.exports = function parse(args, opts) {
   opts = opts || {}; opts.alias = opts.alias || {};
   opts.flags = opts.flags || []; opts.options = opts.options || [];
   args = args || process.argv.slice(2); args = args.slice(0);
   var out = {flags: {}, options: {}, raw: args.slice(0), stdin: false,
     unparsed: [], strict: !!opts.strict};
-  var i, arg, l = args.length, skip, raw, equals, flag, opt, info;
+  var i, arg, l = args.length, skip, raw, equals, flag, opt, info, stop;
   for(i = 0;i < l;i++) {
     if(!args[0]) break; arg = '' + args.shift(); skip = false;
     equals = arg.indexOf('='); raw = ~equals ? arg.slice(0, equals) : arg;
@@ -114,10 +131,16 @@ module.exports = function parse(args, opts) {
 
     if(opts.strict && (!opt && !flag) && !info.aliased) {
       out.unparsed.push(arg);
-    }else if(arg == short) {
+    }else if(arg === short) {
       out.stdin = true;
-    }else if(arg == long) {
-      out.unparsed = out.unparsed.concat(args.slice(i)); break;
+    }else if(stop = breaks(arg, opts, out)) {
+      if(stop instanceof RegExp) {
+        out.unparsed = out.unparsed.concat(
+          [arg.replace(stop, '')].concat(args.slice(i)));
+      }else{
+        out.unparsed = out.unparsed.concat(args.slice(i));
+      }
+      break;
     }else if(opt || ~equals || lre.test(arg)) {
       skip = options(arg, out, args[0], opts, opt);
     }else if(flag || sre.test(arg)) {
