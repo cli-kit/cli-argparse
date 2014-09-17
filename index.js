@@ -53,33 +53,37 @@ function flags(arg, out, next, opts) {
   }
 }
 
-function optkey(arg, negated, opts) {
-  var result = alias(arg.replace(negate, long), opts), key;
+function optkey(arg, negated, opts, vkey) {
+  var result = alias(arg.replace(negate, long), opts)
+    , key = arg;
   if(result.aliased) {
     return result;
   }
-  key = arg.replace(/^-+/, '');
-  if(negated) key = key.replace(/^no-/, '');
-  return {key: camelcase(key)};
+  if(!vkey) {
+    key = arg.replace(/^-+/, '');
+    if(negated) key = key.replace(/^no-/, '');
+  }
+  return {key: vkey ? key : camelcase(key)};
 }
 
 
-function options(arg, out, next, opts, force) {
+function options(arg, out, next, opts, force, vkey) {
   var equals = arg.indexOf('='), value, negated, info, key, raw = '' + arg;
   var flag = force ? !force : (!next && !~equals) ||
     (next && (!next.indexOf(short) && next != short) && !~equals);
   if(~equals) {
-    value = arg.slice(equals + 1); arg = arg.slice(0, equals);
+    value = arg.slice(equals + 1);
+    arg = arg.slice(0, equals);
   }
   if(~opts.flags.indexOf(arg.replace(negate, long))) flag = true;
   if(next && !flag && !~equals) value = next;
   if(next == short || value == short) out.stdin = true;
 
   negated = negate.test(arg);
-  info = optkey(arg, negated, opts);
+  info = optkey(arg, negated, opts, vkey);
   key = info.key;
 
-  if(~equals && !/^-/.test(arg) && !info.aliased) {
+  if(~equals && !/^-/.test(arg) && !info.aliased && !vkey) {
     out.unparsed.push(raw);
     return false;
   }
@@ -87,7 +91,10 @@ function options(arg, out, next, opts, force) {
   if(flag) {
     out.flags[key] = negated ? false : true;
   }else{
-    if(!out.options[key]) {
+    if(vkey) {
+      out.vars[vkey.key] = out.vars[vkey.key] || {};
+      out.vars[vkey.key][key.replace(vkey.match, '')] = value;
+    }else if(!out.options[key]) {
       out.options[key] = value;
     }else{
       if(!Array.isArray(out.options[key])) out.options[key] = [out.options[key]];
@@ -113,23 +120,47 @@ function breaks(arg, opts, out) {
   return list.length > 0 ? list[0] : null;
 }
 
+function isvar(arg, opts) {
+  var k, v, r = false;
+  for(k in opts.vars) {
+    v = opts.vars[k];
+    r = (v instanceof RegExp)
+      ? v.test(arg) : arg.indexOf('' + v) === 0;
+    if(r) {
+      r = {key: k, match: v};
+      break;
+    }
+  }
+  return r;
+}
+
 module.exports = function parse(args, opts) {
   opts = opts || {}; opts.alias = opts.alias || {};
   opts.flags = opts.flags || []; opts.options = opts.options || [];
+  opts.vars = opts.vars || {};
   args = args || process.argv.slice(2); args = args.slice(0);
-  var out = {flags: {}, options: {}, raw: args.slice(0), stdin: false,
-    unparsed: [], strict: !!opts.strict};
-  var i, arg, l = args.length, skip, raw, equals, flag, opt, info, stop;
+  var out = {
+    flags: {}, options: {}, raw: args.slice(0), stdin: false,
+    unparsed: [], strict: !!opts.strict, vars: {}};
+  var i, arg, l = args.length
+    , skip, raw, equals
+    , flag, opt, info, stop
+    , vkey;
   for(i = 0;i < l;i++) {
     if(!args[0]) break; arg = '' + args.shift(); skip = false;
     equals = arg.indexOf('=');
     raw = ~equals ? arg.slice(0, equals) : arg;
-    raw = raw.replace(negate, long); flag = exists(raw, opts.flags);
+    raw = raw.replace(negate, long);
+    flag = exists(raw, opts.flags);
     opt = exists(arg, opts.options);
     info = alias(arg, opts);
+    vkey = isvar(arg, opts);
+    if(vkey) opt = true;
+
+    //console.dir(vkey);
 
     // cater for configured options without leading hyphens
-    if(info.aliased && !info.short && !info.long) {
+    if(info.aliased && !info.short && !info.long && !vkey) {
       flag = negate.test(arg) || !!~opts.flags.indexOf(arg)
         || !!~opts.flags.indexOf(long + arg);
       opt = !!~opts.options.indexOf(arg)
@@ -156,7 +187,8 @@ module.exports = function parse(args, opts) {
       }
       break;
     }else if(opt || ~equals || lre.test(arg)) {
-      skip = options(arg, out, args[0], opts, opt);
+      //console.dir('as option');
+      skip = options(arg, out, args[0], opts, opt, vkey);
     }else if(flag || sre.test(arg)) {
       skip = flags(arg, out, args[0], opts);
     }else{
