@@ -8,16 +8,6 @@ function exists(arg, list) {
   }
 }
 
-function optkey(arg, negated, opts) {
-  var result = alias(arg.replace(negate, long), opts), key;
-  if(result.aliased) {
-    return result.key;
-  }
-  key = arg.replace(/^-+/, '');
-  if(negated) key = key.replace(/^no-/, '');
-  return camelcase(key);
-}
-
 function alias(key, opts) {
   var z, keys;
   for(z in opts.alias) {
@@ -63,8 +53,19 @@ function flags(arg, out, next, opts) {
   }
 }
 
+function optkey(arg, negated, opts) {
+  var result = alias(arg.replace(negate, long), opts), key;
+  if(result.aliased) {
+    return result;
+  }
+  key = arg.replace(/^-+/, '');
+  if(negated) key = key.replace(/^no-/, '');
+  return {key: camelcase(key)};
+}
+
+
 function options(arg, out, next, opts, force) {
-  var equals = arg.indexOf('='), value, negated, key;
+  var equals = arg.indexOf('='), value, negated, info, key, raw = '' + arg;
   var flag = force ? !force : (!next && !~equals) ||
     (next && (!next.indexOf(short) && next != short) && !~equals);
   if(~equals) {
@@ -73,8 +74,16 @@ function options(arg, out, next, opts, force) {
   if(~opts.flags.indexOf(arg.replace(negate, long))) flag = true;
   if(next && !flag && !~equals) value = next;
   if(next == short || value == short) out.stdin = true;
+
   negated = negate.test(arg);
-  key = optkey(arg, negated, opts);
+  info = optkey(arg, negated, opts);
+  key = info.key;
+
+  if(~equals && !/^-/.test(arg) && !info.aliased) {
+    out.unparsed.push(raw);
+    return false;
+  }
+
   if(flag) {
     out.flags[key] = negated ? false : true;
   }else{
@@ -113,7 +122,8 @@ module.exports = function parse(args, opts) {
   var i, arg, l = args.length, skip, raw, equals, flag, opt, info, stop;
   for(i = 0;i < l;i++) {
     if(!args[0]) break; arg = '' + args.shift(); skip = false;
-    equals = arg.indexOf('='); raw = ~equals ? arg.slice(0, equals) : arg;
+    equals = arg.indexOf('=');
+    raw = ~equals ? arg.slice(0, equals) : arg;
     raw = raw.replace(negate, long); flag = exists(raw, opts.flags);
     opt = exists(arg, opts.options);
     info = alias(arg, opts);
