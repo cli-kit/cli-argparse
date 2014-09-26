@@ -27,7 +27,7 @@
     "options"
   ],
   "dependencies": {
-    "cli-util": "^1.1.19"
+    "cli-util": "^1.1.24"
   },
   "devDependencies": {
     "chai": "^1.9.1",
