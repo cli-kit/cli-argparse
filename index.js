@@ -139,6 +139,7 @@ module.exports = function parse(args, opts) {
   opts.flags = opts.flags || []; opts.options = opts.options || [];
   opts.vars = opts.vars || {};
   args = args || process.argv.slice(2); args = args.slice(0);
+  args = args.map(function(arg){return '' + arg;})
   var out = {
     flags: {}, options: {}, raw: args.slice(0), stdin: false,
     unparsed: [], strict: !!opts.strict, vars: {}};
