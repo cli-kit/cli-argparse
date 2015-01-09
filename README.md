@@ -103,6 +103,7 @@ Returns a result object.
 * `alias`: Map of argument names to property names.
 * `flags`: Array of argument names to be treated as flags.
 * `options`: Array of argument names to be treated as options.
+* `short`: Allow short options to have values.
 * `strict`: A boolean that indicates only arguments specified as `options` or `flags` should be parsed.
 * `flat`: A boolean that creates a flat result structure.
 * `stop`: Array of strings or patterns to stop parsing on, the special pattern `--` is always respected first.

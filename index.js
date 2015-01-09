@@ -187,7 +187,9 @@ module.exports = function parse(args, opts) {
         out.empty = true;
       }
       break;
-    }else if(opt || ~equals || lre.test(arg)) {
+    }else if(opt || ~equals || lre.test(arg)
+      // short options may have values
+      || opts.short && sre.test(arg)) {
       //console.dir('as option');
       skip = options(arg, out, args[0], opts, opt, vkey);
     }else if(flag || sre.test(arg)) {
