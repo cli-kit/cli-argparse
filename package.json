@@ -27,7 +27,7 @@
     "options"
   ],
   "dependencies": {
-    "cli-util": "~1.1.27"
+    "camelcase": "~1.0.2"
   },
   "devDependencies": {
     "chai": "~1.10.0",
@@ -39,6 +39,5 @@
   ],
   "scripts": {
     "test": "istanbul cover _mocha -- -u bdd --recursive --reporter list -A test/spec"
-  },
-  "config": {}
+  }
 }

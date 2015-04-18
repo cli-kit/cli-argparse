@@ -1,6 +1,6 @@
 var short = '-', long = '--';
 var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /(--)?no-/;
-var camelcase = require('cli-util').camelcase;
+var camelcase = require('camelcase');
 
 function exists(arg, list) {
   for(var i = 0;i < list.length;i++){
