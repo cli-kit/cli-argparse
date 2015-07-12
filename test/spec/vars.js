@@ -40,7 +40,7 @@ describe('cli-argparse:', function() {
 
   it('should collect vars by regexp', function(done) {
     var args = [':symbol', 'value'];
-    var result = parse(args, {vars: {symbols: /^:/}});
+    var result = parse(args, {vars: {symbols: /^:([a-zA-Z0-9-])/}});
     expect(result.raw).to.eql(args);
     //console.dir(result);
     expect(result.vars.symbols).to.be.an('object')

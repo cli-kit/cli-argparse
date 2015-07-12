@@ -93,7 +93,9 @@ function options(arg, out, next, opts, force, vkey) {
   }else{
     if(vkey) {
       out.vars[vkey.key] = out.vars[vkey.key] || {};
-      out.vars[vkey.key][key.replace(vkey.match, '')] = value;
+      out.vars[vkey.key][(vkey.match instanceof RegExp)
+        ? key.replace(vkey.match, '$1')
+        : key.replace(vkey.match, '')] = value;
     }else if(!out.options[key]) {
       out.options[key] = value;
     }else{
@@ -158,8 +160,6 @@ module.exports = function parse(args, opts) {
     vkey = isvar(arg, opts);
     if(vkey) opt = true;
 
-    //console.dir(vkey);
-
     // cater for configured options without leading hyphens
     if(info.aliased && !info.short && !info.long && !vkey) {
       flag = negate.test(arg) || !!~opts.flags.indexOf(arg)
@@ -190,7 +190,6 @@ module.exports = function parse(args, opts) {
     }else if(opt || ~equals || lre.test(arg)
       // short options may have values
       || opts.short && sre.test(arg)) {
-      //console.dir('as option');
       skip = options(arg, out, args[0], opts, opt, vkey);
     }else if(flag || sre.test(arg)) {
       skip = flags(arg, out, args[0], opts);
