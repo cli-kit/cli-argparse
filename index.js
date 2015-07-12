@@ -158,7 +158,9 @@ module.exports = function parse(args, opts) {
     opt = exists(arg, opts.options);
     info = alias(arg, opts);
     vkey = isvar(arg, opts);
-    if(vkey) opt = true;
+    if(vkey && ~equals) {
+      opt = true;
+    }
 
     // cater for configured options without leading hyphens
     if(info.aliased && !info.short && !info.long && !vkey) {
