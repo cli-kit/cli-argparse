@@ -27,12 +27,12 @@
     "options"
   ],
   "dependencies": {
-    "camelcase": "~1.0.2"
+    "camelcase": "~1.1.0"
   },
   "devDependencies": {
-    "chai": "~1.10.0",
-    "istanbul": "~0.3.5",
-    "mocha": "~2.1.0"
+    "chai": "~3.2.0",
+    "istanbul": "~0.3.17",
+    "mocha": "~2.2.5"
   },
   "engine": [
     "node >= 0.10.21"
