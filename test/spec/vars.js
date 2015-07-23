@@ -11,14 +11,14 @@ describe('cli-argparse:', function() {
     //done();
   //});
 
-  it('should collect vars by after non-aliased long option', function(done) {
-    var args = ['--no-color', '@var=value'];
-    var result = parse(args, {vars: {collection: '@'}});
-    expect(result.raw).to.eql(args);
-    expect(result.vars.collection).to.be.an('object')
-    expect(result.vars.collection['var']).to.eql('value');
-    done();
-  });
+  //it('should collect vars by after non-aliased long option', function(done) {
+    //var args = ['--no-color', '@var=value'];
+    //var result = parse(args, {vars: {collection: '@'}});
+    //expect(result.raw).to.eql(args);
+    //expect(result.vars.collection).to.be.an('object')
+    //expect(result.vars.collection['var']).to.eql('value');
+    //done();
+  //});
 
   it('should collect vars by string prefix (equality)', function(done) {
     var args = ['@var=value'];

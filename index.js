@@ -152,7 +152,7 @@ module.exports = function parse(args, opts) {
   for(i = 0;i < l;i++) {
     if(!args[0]) break; 
     arg = '' + args.shift();
-    next = args[i];
+    //next = args[i];
     skip = false;
     equals = arg.indexOf('=');
     raw = ~equals ? arg.slice(0, equals) : arg;
@@ -196,8 +196,8 @@ module.exports = function parse(args, opts) {
     // handle the case where a long option is not aliases
     // and is followed by a value that looks like a variable
     // declaration, do not assign but treat option as flag
-    }else if(next && isvar(next, opts) && !info.aliased) {
-      out.unparsed.push(arg);
+    //}else if(next && isvar(next, opts) && !info.aliased) {
+      //out.unparsed.push(arg);
     }else if(opt || ~equals || lre.test(arg)
       // short options may have values
       || opts.short && sre.test(arg)) {
