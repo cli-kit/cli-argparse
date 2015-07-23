@@ -201,7 +201,6 @@ module.exports = function parse(args, opts) {
     }else if(opt || ~equals || lre.test(arg)
       // short options may have values
       || opts.short && sre.test(arg)) {
-      //console.dir('processing as option!!!');
       skip = options(arg, out, args[0], opts, opt, vkey);
     }else if(flag || sre.test(arg)) {
       skip = flags(arg, out, args[0], opts);
