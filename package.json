@@ -38,7 +38,7 @@
     "node >= 0.10.21"
   ],
   "scripts": {
-    "test": "NODE_ENV=test mocha test/spec",
+    "test": "NODE_ENV=test mocha ${TEST_SPEC:-test/spec}",
     "cover": "NODE_ENV=test istanbul cover _mocha -- test/spec"
   }
 }

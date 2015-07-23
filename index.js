@@ -145,12 +145,15 @@ module.exports = function parse(args, opts) {
   var out = {
     flags: {}, options: {}, raw: args.slice(0), stdin: false,
     unparsed: [], strict: !!opts.strict, vars: {}};
-  var i, arg, l = args.length
+  var i, arg, l = args.length, next
     , skip, raw, equals
     , flag, opt, info, stop
     , vkey;
   for(i = 0;i < l;i++) {
-    if(!args[0]) break; arg = '' + args.shift(); skip = false;
+    if(!args[0]) break; 
+    arg = '' + args.shift();
+    next = args[i];
+    skip = false;
     equals = arg.indexOf('=');
     raw = ~equals ? arg.slice(0, equals) : arg;
     raw = raw.replace(negate, long);
@@ -170,7 +173,8 @@ module.exports = function parse(args, opts) {
         || !!~opts.options.indexOf(long + arg);
     }
 
-    //console.log('arg: %s, flag: %s, opt: %s (%j)', arg, flag, opt, info);
+    //console.log(
+      //'arg: %s, flag: %s, opt: %s (%j) %s', arg, flag, opt, info, next);
 
     if(opts.strict && (!opt && !flag) && !info.aliased) {
       out.unparsed.push(arg);
@@ -189,9 +193,15 @@ module.exports = function parse(args, opts) {
         out.empty = true;
       }
       break;
+    // handle the case where a long option is not aliases
+    // and is followed by a value that looks like a variable
+    // declaration, do not assign but treat option as flag
+    }else if(next && isvar(next, opts) && !info.aliased) {
+      out.unparsed.push(arg);
     }else if(opt || ~equals || lre.test(arg)
       // short options may have values
       || opts.short && sre.test(arg)) {
+      //console.dir('processing as option!!!');
       skip = options(arg, out, args[0], opts, opt, vkey);
     }else if(flag || sre.test(arg)) {
       skip = flags(arg, out, args[0], opts);
