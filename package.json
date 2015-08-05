@@ -27,17 +27,15 @@
     "options"
   ],
   "dependencies": {
-    "camelcase": "~1.1.0"
+    "camelcase": "~1.2.1"
   },
   "devDependencies": {
     "chai": "~3.2.0",
     "istanbul": "~0.3.17",
     "mocha": "~2.2.5"
   },
-  "engine": [
-    "node >= 0.10.21"
-  ],
   "scripts": {
+    "clean": "rm -rf coverage",
     "test": "NODE_ENV=test mocha ${TEST_SPEC:-test/spec}",
     "cover": "NODE_ENV=test istanbul cover _mocha -- test/spec"
   }
