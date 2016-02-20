@@ -3,7 +3,8 @@ var parse = require('../..');
 
 describe('cli-argparse:', function() {
   it('should ignore non-options (start)', function(done) {
-    var args = ['server', 'start', '-v', '--port=80', '--host-name', 'localhost'];
+    var args =
+      ['server', 'start', '-v', '--port=80', '--host-name', 'localhost'];
     var result = parse(args);
     expect(result.raw).to.eql(args);
     expect(result.flags.v).to.eql(true);
@@ -14,7 +15,8 @@ describe('cli-argparse:', function() {
     done();
   });
   it('should ignore non-options (end)', function(done) {
-    var args = ['-v', '--port=80', '--host-name', 'localhost', 'server', 'start'];
+    var args =
+      ['-v', '--port=80', '--host-name', 'localhost', 'server', 'start'];
     var result = parse(args);
     expect(result.raw).to.eql(args);
     expect(result.flags.v).to.eql(true);

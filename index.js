@@ -99,7 +99,9 @@ function options(arg, out, next, opts, force, vkey) {
     }else if(!out.options[key]) {
       out.options[key] = value;
     }else{
-      if(!Array.isArray(out.options[key])) out.options[key] = [out.options[key]];
+      if(!Array.isArray(out.options[key])) {
+        out.options[key] = [out.options[key]];
+      }
       out.options[key].push(value);
     }
   }
@@ -174,7 +176,7 @@ module.exports = function parse(args, opts) {
     }
 
     //console.log(
-      //'arg: %s, flag: %s, opt: %s (%j) %s', arg, flag, opt, info, next);
+    //'arg: %s, flag: %s, opt: %s (%j) %s', arg, flag, opt, info, next);
 
     if(opts.strict && (!opt && !flag) && !info.aliased) {
       out.unparsed.push(arg);
