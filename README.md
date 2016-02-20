@@ -26,9 +26,9 @@ Table of Contents
 Parse
 =====
 
-[<img src="https://travis-ci.org/tmpfs/cli-argparse.svg?v=1" alt="Build Status">](https://travis-ci.org/tmpfs/cli-argparse)
-[<img src="http://img.shields.io/npm/v/cli-argparse.svg?v=1" alt="npm version">](https://npmjs.org/package/cli-argparse)
-[<img src="https://coveralls.io/repos/tmpfs/cli-argparse/badge.svg?branch=master&service=github&v=2" alt="Coverage Status">](https://coveralls.io/github/tmpfs/cli-argparse?branch=master).
+[<img src="https://travis-ci.org/cli-kit/cli-argparse.svg?v=2" alt="Build Status">](https://travis-ci.org/tmpfs/cli-argparse)
+[<img src="http://img.shields.io/npm/v/cli-argparse.svg?v=2" alt="npm version">](https://npmjs.org/package/cli-argparse)
+[<img src="https://coveralls.io/repos/cli-kit/cli-argparse/badge.svg?branch=master&service=github&v=2" alt="Coverage Status">](https://coveralls.io/github/tmpfs/cli-argparse?branch=master).
 
 Lightweight yet feature rich argument parser.
 
@@ -149,6 +149,7 @@ The result object contains the fields:
 * `skip`: Array of args skipped upon `--` or a custom stop pattern.
 * `stop`: If a stop pattern matched this will contain the pattern that matched (string or regexp).
 * `empty`: Set to `true` if a stop pattern matched on the first argument.
+* `vars`: Variables collected when the `vars` option is configured.
 
 ##### Aliases
 

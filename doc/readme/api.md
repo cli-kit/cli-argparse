@@ -37,6 +37,7 @@ The result object contains the fields:
 * `skip`: Array of args skipped upon `--` or a custom stop pattern.
 * `stop`: If a stop pattern matched this will contain the pattern that matched (string or regexp).
 * `empty`: Set to `true` if a stop pattern matched on the first argument.
+* `vars`: Variables collected when the `vars` option is configured.
 
 ##### Aliases
 

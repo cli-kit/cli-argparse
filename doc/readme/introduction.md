@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/tmpfs/cli-argparse.svg?v=1)](https://travis-ci.org/tmpfs/cli-argparse)
-[![npm version](http://img.shields.io/npm/v/cli-argparse.svg?v=1)](https://npmjs.org/package/cli-argparse)
-[![Coverage Status](https://coveralls.io/repos/tmpfs/cli-argparse/badge.svg?branch=master&service=github&v=2)](https://coveralls.io/github/tmpfs/cli-argparse?branch=master)
+[![Build Status](https://travis-ci.org/cli-kit/cli-argparse.svg?v=2)](https://travis-ci.org/tmpfs/cli-argparse)
+[![npm version](http://img.shields.io/npm/v/cli-argparse.svg?v=2)](https://npmjs.org/package/cli-argparse)
+[![Coverage Status](https://coveralls.io/repos/cli-kit/cli-argparse/badge.svg?branch=master&service=github&v=2)](https://coveralls.io/github/tmpfs/cli-argparse?branch=master)
 
 Lightweight yet feature rich argument parser.
 
