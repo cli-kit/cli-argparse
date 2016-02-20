@@ -22,6 +22,7 @@ Returns a result object.
 * `strict`: A boolean that indicates only arguments specified as `options` or `flags` should be parsed.
 * `flat`: A boolean that creates a flat result structure.
 * `stop`: Array of strings or patterns to stop parsing on, the special pattern `--` is always respected first.
+* `vars`: A string or regexp used to collect variables into the `vars` object.
 
 Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
 
@@ -61,4 +62,8 @@ A `boolean` that indicates that only known arguments (those declared in the opti
 Creating a flat result can be useful if you are certain that there are no naming collisions, typically this can be achieved by providing hints using `flags` and `options`.
 
 When this option is specified the result object will not have a `flags` property, instead all flags and options will be in the `options` property of the result.
+
+##### Vars
+
+Sometimes it is useful to collect arguments following a convention, for example `-D` like java or maybe all arguments prefixed with `@`. When the `vars` option is set all arguments that match the convention are collected in to the `vars` result object, see the [vars test spec](/test/spec/vars.js) for examples.
 
