@@ -154,7 +154,7 @@ function isvar(arg, opts) {
   return r;
 }
 
-module.exports = function parse(args, opts) {
+function parse(args, opts) {
   opts = opts || {}; opts.alias = opts.alias || {};
   opts.flags = opts.flags || []; opts.options = opts.options || [];
   opts.vars = opts.vars || {};
@@ -163,7 +163,7 @@ module.exports = function parse(args, opts) {
   var out = {
     flags: {}, options: {}, raw: args.slice(0), stdin: false,
     unparsed: [], strict: !!opts.strict, vars: {}};
-  var i, arg, l = args.length //, next
+  var i, arg, l = args.length
     , skip, raw, equals
     , flag, opt, info, stop
     , vkey;
@@ -213,13 +213,6 @@ module.exports = function parse(args, opts) {
         out.empty = true;
       }
       break;
-    // handle the case where a long option is not aliases
-    // and is followed by a value that looks like a variable
-    // declaration, do not assign but treat option as flag
-    //}else if(next && isvar(next, opts) && !info.aliased) {
-      //console.dir('next is var...');
-      //out.unparsed.push(arg);
-      //skip = flags(arg, out, args[0], opts);
     }else if(opt || ~equals || lre.test(arg)
       // short options may have values
       || opts.short && sre.test(arg)) {
@@ -241,4 +234,6 @@ module.exports = function parse(args, opts) {
     delete out.flags;
   }
   return out;
-};
+}
+
+module.exports = parse;
