@@ -36,8 +36,8 @@
   "scripts": {
     "clean": "rm -rf coverage",
     "lint": "jshint . && jscs .",
-    "test": "NODE_ENV=test mocha ${TEST_SPEC:-test/spec}",
-    "cover": "NODE_ENV=test istanbul cover _mocha -- test/spec",
+    "test": "NODE_ENV=test mocha ${SPEC:-test/spec}",
+    "cover": "NODE_ENV=test istanbul cover _mocha -- ${SPEC:-test/spec}",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   }
 }
