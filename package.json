@@ -34,10 +34,46 @@
     "mocha": "~2.4.5"
   },
   "scripts": {
-    "clean": "rm -rf coverage",
     "lint": "jshint . && jscs .",
+    "readme": "mdp --force -v",
+    "clean": "rm -rf coverage",
     "test": "NODE_ENV=test mocha ${SPEC:-test/spec}",
     "cover": "NODE_ENV=test istanbul cover _mocha -- ${SPEC:-test/spec}",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+  },
+  "mdp": {
+    "title": "Parse",
+    "pedantic": true,
+    "include": "doc/readme",
+    "require": "lib",
+    "links": "links.md",
+    "toc": "Table of Contents",
+    "base": "https://github.com/cli-kit/cli-argparse",
+    "partial": [
+      {
+        "inc": [
+          "introduction.md",
+          "install.md"
+        ]
+      },
+      {
+        "title": "Example",
+        "inc": "../../example.js",
+        "type": "code",
+        "language": "javascript"
+      },
+      {
+        "bin": "node example.js",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "inc": [
+          "api.md",
+          "developer.md",
+          "license.md"
+        ]
+      }
+    ]
   }
 }

@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-var parse = require('..');
+var parse = require('./index');
 var args = [
   'server',
   'start',
