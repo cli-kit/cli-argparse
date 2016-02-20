@@ -1,10 +1,12 @@
-var short = '-', long = '--';
-var sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /(--)?no-/;
-var camelcase = require('camelcase');
+var short = '-', long = '--'
+  , sre = /^-[^-]+/, lre = /^--[^-]+/, negate = /(--)?no-/
+  , camelcase = require('camelcase');
 
 function exists(arg, list) {
   for(var i = 0;i < list.length;i++){
-    if(arg.indexOf(list[i]) === 0) return true;
+    if(arg.indexOf(list[i]) === 0) {
+      return true;
+    }
   }
 }
 
@@ -27,9 +29,13 @@ function alias(key, opts) {
 
 function flags(arg, out, next, opts) {
   var result = alias(arg, opts), keys, i = 0, key, v = true;
-  if(result.aliased) out.flags[result.key] = v;
+  if(result.aliased) {
+    out.flags[result.key] = v;
+  }
   arg = arg.replace(/^-/, ''); keys = arg.split('');
-  if(keys.length <= 1 && result.aliased) return;
+  if(keys.length <= 1 && result.aliased) {
+    return;
+  }
 
   // cater for aliased flags without leading hyphens
   if(result.aliased) {
@@ -44,11 +50,13 @@ function flags(arg, out, next, opts) {
       out.unparsed.push(short + key);
       continue;
     }
-    if(i == keys.length - 1 && ~opts.options.indexOf(short + key)) {
+    if(i === (keys.length - 1) && ~opts.options.indexOf(short + key)) {
       return options(short + key, out, next, opts);
     }
     result = alias(short + key, opts);
-    if(result.negated) v = false;
+    if(result.negated) {
+      v = false;
+    }
     out.flags[result.aliased ? result.key : key] = v;
   }
 }
@@ -61,7 +69,9 @@ function optkey(arg, negated, opts, vkey) {
   }
   if(!vkey) {
     key = arg.replace(/^-+/, '');
-    if(negated) key = key.replace(/^no-/, '');
+    if(negated) {
+      key = key.replace(/^no-/, '');
+    }
   }
   return {key: vkey ? key : camelcase(key)};
 }
@@ -70,14 +80,20 @@ function optkey(arg, negated, opts, vkey) {
 function options(arg, out, next, opts, force, vkey) {
   var equals = arg.indexOf('='), value, negated, info, key, raw = '' + arg;
   var flag = force ? !force : (!next && !~equals) ||
-    (next && (!next.indexOf(short) && next != short) && !~equals);
+    (next && (!next.indexOf(short) && next !== short) && !~equals);
   if(~equals) {
     value = arg.slice(equals + 1);
     arg = arg.slice(0, equals);
   }
-  if(~opts.flags.indexOf(arg.replace(negate, long))) flag = true;
-  if(next && !flag && !~equals) value = next;
-  if(next == short || value == short) out.stdin = true;
+  if(~opts.flags.indexOf(arg.replace(negate, long))) {
+    flag = true;
+  }
+  if(next && !flag && !~equals) {
+    value = next;
+  }
+  if(next === short || value === short) {
+    out.stdin = true;
+  }
 
   negated = negate.test(arg);
   info = optkey(arg, negated, opts, vkey);
@@ -105,7 +121,7 @@ function options(arg, out, next, opts, force, vkey) {
       out.options[key].push(value);
     }
   }
-  return (value == next);
+  return (value === next);
 }
 
 function breaks(arg, opts, out) {
@@ -147,12 +163,14 @@ module.exports = function parse(args, opts) {
   var out = {
     flags: {}, options: {}, raw: args.slice(0), stdin: false,
     unparsed: [], strict: !!opts.strict, vars: {}};
-  var i, arg, l = args.length, next
+  var i, arg, l = args.length //, next
     , skip, raw, equals
     , flag, opt, info, stop
     , vkey;
   for(i = 0;i < l;i++) {
-    if(!args[0]) break; 
+    if(!args[0]) {
+      break; 
+    }
     arg = '' + args.shift();
     //next = args[i];
     skip = false;
@@ -182,7 +200,7 @@ module.exports = function parse(args, opts) {
       out.unparsed.push(arg);
     }else if(arg === short) {
       out.stdin = true;
-    }else if(stop = breaks(arg, opts, out)) {
+    }else if((stop = breaks(arg, opts, out))) {
       if(stop instanceof RegExp) {
         stop = arg.replace(stop, '');
         out.skip = stop ? [stop] : [];
@@ -211,10 +229,15 @@ module.exports = function parse(args, opts) {
     }else{
       out.unparsed.push(arg);
     }
-    if(skip) args.shift(); l--; i--;
+    if(skip) {
+      args.shift();
+    }
+    l--; i--;
   }
   if(opts.flat) {
-    for(var z in out.flags) {out.options[z] = out.flags[z];}
+    for(var z in out.flags) {
+      out.options[z] = out.flags[z];
+    }
     delete out.flags;
   }
   return out;
