@@ -24,9 +24,6 @@
     "arguments",
     "options"
   ],
-  "dependencies": {
-    "camelcase": "~2.1.0"
-  },
   "devDependencies": {
     "chai": "~3.5.0",
     "coveralls": "~2.11.6",
