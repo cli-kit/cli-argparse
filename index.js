@@ -73,7 +73,7 @@ function optkey(arg, negated, opts, vkey) {
       key = key.replace(/^no-/, '');
     }
   }
-  return {key: vkey ? key : camelcase(key)};
+  return {key: vkey ? key : (opts.camelcase !== false ? camelcase(key) : key)};
 }
 
 

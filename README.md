@@ -135,8 +135,7 @@ Returns a result object.
 * `flat`: A boolean that creates a flat result structure.
 * `stop`: Array of strings or patterns to stop parsing on, the special pattern `--` is always respected first.
 * `vars`: A string or regexp used to collect variables into the `vars` object.
-
-Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
+* `camcelcase`: When `false` do not convert option names to camelcase.
 
 #### Result
 
@@ -156,6 +155,8 @@ The result object contains the fields:
 Aliases allow arguments to map to meaningful property names that will be set on the result object `options` and `flags`.
 
 Aliases are mapped on the raw argument name, to map `-v | --verbose` to a `verbose` property use `{'-v --verbose': 'verbose'}`.
+
+Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
 
 ##### Flags
 
