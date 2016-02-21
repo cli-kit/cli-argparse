@@ -39,7 +39,7 @@ The result object contains the fields:
 * `empty`: Set to `true` if a stop pattern matched on the first argument.
 * `vars`: Variables collected when the `vars` option is configured.
 
-##### Aliases
+#### Aliases
 
 Aliases allow arguments to map to meaningful property names that will be set on the result object `options` and `flags`.
 
@@ -47,25 +47,25 @@ Aliases are mapped on the raw argument name, to map `-v | --verbose` to a `verbo
 
 Note that you should **not** use the negated long form (--no-highlight) when specifying these hints, always use the positive form.
 
-##### Flags
+#### Flags
 
 Use the flags array when you need to force a long argument to be treated as a flag, for example `['--syntax-highlight']`.
 
-##### Options
+#### Options
 
 Use the options array when you need to treat a short argument as accepting a value, for example `['-f']`.
 
-##### Strict
+#### Strict
 
 A `boolean` that indicates that only known arguments (those declared in the options and flags properties) are accepted, all other arguments will be placed in the unparsed array.
 
-##### Flat
+#### Flat
 
 Creating a flat result can be useful if you are certain that there are no naming collisions, typically this can be achieved by providing hints using `flags` and `options`.
 
 When this option is specified the result object will not have a `flags` property, instead all flags and options will be in the `options` property of the result.
 
-##### Vars
+#### Vars
 
 Sometimes it is useful to collect arguments following a convention, for example `-D` like java or maybe all arguments prefixed with `@`. When the `vars` option is set all arguments that match the convention are collected in to the `vars` result object, see the [vars test spec](/test/spec/vars.js) for examples.
 
