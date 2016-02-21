@@ -135,7 +135,7 @@ Returns a result object.
 * `flat`: A boolean that creates a flat result structure.
 * `stop`: Array of strings or patterns to stop parsing on, the special pattern `--` is always respected first.
 * `vars`: A string or regexp used to collect variables into the `vars` object.
-* `camcelcase`: When `false` do not convert option names to camelcase; when a string or regexp split the option name on the given pattern for conversion to camelcase.
+* `camelcase`: When `false` do not convert option names to camelcase; when a string or regexp split the option name on the given pattern for conversion to camelcase.
 
 #### Result
 
