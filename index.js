@@ -261,4 +261,6 @@ function parse(args, opts) {
   return out;
 }
 
+parse.camelcase = camelcase;
+
 module.exports = parse;
