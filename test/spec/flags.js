@@ -3,13 +3,20 @@ var parse = require('../..');
 
 describe('cli-argparse:', function() {
   it('should parse flag options', function(done) {
-    var args = ['-v', '-cffV'];
+    var args = ['-v', '-cfV'];
     var result = parse(args);
     expect(result.raw).to.eql(args);
     expect(result.flags.v).to.eql(true);
     expect(result.flags.c).to.eql(true);
     expect(result.flags.f).to.eql(true);
     expect(result.flags.V).to.eql(true);
+    done();
+  });
+  it('should parse multiple flag option as integer', function(done) {
+    var args = ['-vv'];
+    var result = parse(args);
+    expect(result.raw).to.eql(args);
+    expect(result.flags.v).to.eql(2);
     done();
   });
   it('should parse long flag option', function(done) {

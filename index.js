@@ -6,6 +6,7 @@ var short = '-'
 /**
  *  Convert an argument name to camelcase.
  *
+ *  @function camelcase
  *  @param str {String} The string to convert.
  *  @param ptn {String|RegExp} The pattern to split on.
  */
@@ -47,19 +48,26 @@ function alias(key, opts) {
   return {key: key, aliased: false};
 }
 
+function flag(out, key, value) {
+  // flag already set, treat as positive integer
+  if(out.flags[key] && value) {
+    out.flags[key] = typeof out.flags[key] === 'boolean'
+      ? 1 : out.flags[key];
+    out.flags[key]++;
+  }else{
+    out.flags[key] = value;
+  }
+}
+
 function flags(arg, out, next, opts) {
   var result = alias(arg, opts), keys, i = 0, key, v = true;
   if(result.aliased) {
-    out.flags[result.key] = v;
+    flag(out, result.key, result.negated ? false : true);
   }
-  arg = arg.replace(/^-/, ''); keys = arg.split('');
-  if(keys.length <= 1 && result.aliased) {
-    return;
-  }
+  arg = arg.replace(/^-/, '');
+  keys = arg.split('');
 
-  // cater for aliased flags without leading hyphens
-  if(result.aliased) {
-    out.flags[result.key] = result.negated ? false : true;
+  if(keys.length <= 1 && result.aliased) {
     return;
   }
 
@@ -77,7 +85,7 @@ function flags(arg, out, next, opts) {
     if(result.negated) {
       v = false;
     }
-    out.flags[result.aliased ? result.key : key] = v;
+    flag(out, result.aliased ? result.key : key, v);
   }
 }
 
@@ -104,16 +112,16 @@ function optkey(arg, negated, opts, vkey) {
 
 function options(arg, out, next, opts, force, vkey) {
   var equals = arg.indexOf('='), value, negated, info, key, raw = '' + arg;
-  var flag = force ? !force : (!next && !~equals) ||
+  var isFlag = force ? !force : (!next && !~equals) ||
     (next && (!next.indexOf(short) && next !== short) && !~equals);
   if(~equals) {
     value = arg.slice(equals + 1);
     arg = arg.slice(0, equals);
   }
   if(~opts.flags.indexOf(arg.replace(negate, long))) {
-    flag = true;
+    isFlag = true;
   }
-  if(next && !flag && !~equals) {
+  if(next && !isFlag && !~equals) {
     value = next;
   }
   if(next === short || value === short) {
@@ -129,8 +137,8 @@ function options(arg, out, next, opts, force, vkey) {
     return false;
   }
 
-  if(flag) {
-    out.flags[key] = negated ? false : true;
+  if(isFlag) {
+    flag(out, key, negated ? false : true);
   }else{
     if(vkey) {
       out.vars[vkey.key] = out.vars[vkey.key] || {};
